@@ -1,0 +1,169 @@
+body{
+    margin: 0 auto;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    background-color: #333;
+}
+
+html{
+    scroll-behavior: smooth;
+    margin: 0 auto;
+    padding: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    
+}
+
+.cabecera{
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    width: 100%;
+    min-height: 50px;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    z-index: 4;
+    justify-content: center;
+    margin-bottom: 0px;
+}
+
+.cabecera a {
+    color: white;
+    text-decoration: none;
+    margin: 0px 20px 0px 20px;
+    transition: all 0.3s ease;
+}
+.cabecera a:hover {
+    color: #ffffff;
+    background-color: #bd9700;
+}
+.cabecera .button {
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    right: 20px;
+    border-radius: 20px;
+}
+.cabecera button:hover {
+    background-color: #e6b800;
+}
+
+.titulo {
+    width: 100vw;
+    height: 88vh;
+    font-size: 35px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), 
+                      url(../images/imageninicio.png); /* Degradado + imagen */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    user-select: none;
+}
+
+.titulo h1, .titulo h2 {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.titulo h1 {
+    animation-delay: 0.2s; /* Retraso para animar primero el título principal */
+}
+
+.titulo h2 {
+    animation-delay: 0.4s; /* Retraso para animar después el subtítulo */
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.whois {
+    padding: 20px;
+    background-color: transparent; /* Fondo claro */
+    color: #c4c4c4; /* Texto oscuro */
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    border-top: 5px solid #ffcc00; /* Línea decorativa superior */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    margin: 150px auto;
+    max-width: 800px; /* Limita el ancho para mejor legibilidad */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.whois h3 {
+    font-size: 24px;
+    color: #ffffff; /* Título más oscuro */
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.whois p {
+    margin-bottom: 10px;
+    text-align: justify; /* Justifica el texto */
+}
+
+.contactme {
+    padding: 20px;
+    background-color:  transparent; /* Fondo claro */
+    color: #c4c4c4; /* Texto oscuro */
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    border-top: 5px solid #ffcc00; /* Línea decorativa superior */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    margin: 150px auto;
+    max-width: 800px; /* Limita el ancho para mejor legibilidad */
+    border-radius: 8px; /* Bordes redondeados */
+    text-align: center; /* Centra el contenido */
+    margin-bottom: 100px; /* Espacio inferior */
+}
+
+.contactme h3 {
+    font-size: 24px;
+    color: #ffffff; /* Título más oscuro */
+    margin-bottom: 10px;
+}
+
+.contactme p {
+    margin-bottom: 10px;
+}
+
+.contactme a {
+    color: #ffcc00; /* Color del enlace */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contactme a:hover {
+    color: #e6b800; /* Color del enlace al pasar el cursor */
+    text-decoration: underline;
+}
