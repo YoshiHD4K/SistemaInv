@@ -13,12 +13,12 @@ function sendEmail($destinatario, $asunto, $rutaImagen, $mensajeOpcional) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com'; //servidor SMTP       
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'mbart1852@gmail.com'; // Tu email
-         $mail->Password   = 'sweopfuerijnqxyi'; // Contraseña de app gmail SMTP              
+        $mail->Username   = 'sistemainventario30@gmail.com'; // Tu email
+         $mail->Password   = 'hqtqyvhtizpcmkhg'; // Contraseña de app gmail SMTP              
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;;
         $mail->Port       = 465;
 
-        $mail->setFrom('mbart1852@gmail.com', 'Daniel Diaz');
+        $mail->setFrom('sistemainventario30@gmail.com', 'Sistema Inventario');
         $mail->addAddress($destinatario);
 
         $mail->isHTML(true);
