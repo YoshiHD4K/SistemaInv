@@ -39,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['correo'])) {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Cambia esto según tu proveedor de correo
             $mail->SMTPAuth = true;
-            $mail->Username = 'tomyreveroncito@gmail.com'; // Tu correo electrónico
-            $mail->Password = 'tlhi woez xyal mssj'; // Tu contraseña (o App Password si usas Gmail)
+            $mail->Username = 'sistemainventario30@gmail.com'; // Tu correo electrónico
+            $mail->Password = 'lcqo skti nggt hpar'; // Tu contraseña (o App Password si usas Gmail)
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             // Configuración del correo
-            $mail->setFrom('tomyreveroncito@gmail.com', 'SistemaInv'); // Remitente
+            $mail->setFrom('sistemainventario30@gmail.com', 'Sistema Inventario'); // Remitente
             $mail->addAddress($correo); // Destinatario
 
             $mail->isHTML(true);
