@@ -15,6 +15,11 @@ html{
     
 }
 
+.espacio{
+    width: 100%;
+    min-height: 50px;
+}
+
 .cabecera{
     background-color: black;
     color: white;
@@ -31,17 +36,24 @@ html{
     z-index: 4;
     justify-content: center;
     margin-bottom: 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .cabecera a {
     color: white;
     text-decoration: none;
     margin: 0px 20px 0px 20px;
-    transition: all 0.3s ease;
+    
 }
 .cabecera a:hover {
     color: #ffffff;
-    background-color: #bd9700;
+    border-bottom: #e6b800 solid 3px;
+}
+.cabecera a:active {
+    color: #e6b800;
+    border-bottom: #e6b800 solid 3px;
 }
 .cabecera .button {
     background-color: #ffcc00;
