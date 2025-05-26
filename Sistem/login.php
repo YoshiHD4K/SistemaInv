@@ -1,4 +1,6 @@
 <?php
+session_start();
+$_SESSION['usuario'] = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = $_POST['Usuario'] ?? '';
     $contraseña = $_POST['Contraseña'] ?? '';
@@ -23,10 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Mostrar un alert de JavaScript
-        echo "<script>
+        // Mostrar un alert de 
+        $user = $result->fetch_assoc();
+        $_SESSION['usuario'] = $usuario;
+        $_SESSION['tipo'] = $user['Tipo'];
+        if ($user['Tipo'] == 'cajero') {
+            echo "<script>
                 alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-              </script>";
+                window.location.href = 'cajero.php';
+                </script>";
+        }
     } else {
         // Mostrar un alert de error y redirigir a index.php
         echo "<script>
