@@ -6,5 +6,6 @@
     "partederecha",
     "parteizquierda",
     "regi"
-  ]
+  ],
+  "php.validate.executablePath": ""
 }
