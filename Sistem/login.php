@@ -35,6 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 window.location.href = 'cajero.php';
                 </script>";
         }
+        if ($user['Tipo'] == 'admin') {
+            echo "<script>
+                alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
+                window.location.href = 'inventory.php';
+                </script>";
+        }
     } else {
         // Mostrar un alert de error y redirigir a index.php
         echo "<script>
