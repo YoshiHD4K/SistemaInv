@@ -35,10 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 window.location.href = 'cajero.php';
                 </script>";
         }
-        if ($user['Tipo'] == 'admin') {
+        if ($user['Tipo'] == 'regular') {
             echo "<script>
                 alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-                window.location.href = 'inventory.php';
+                window.location.href = 'regular.php';
                 </script>";
         }
     } else {
