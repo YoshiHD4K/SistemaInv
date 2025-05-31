@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
     $direccion = $_POST['direccion_proveedor'];
     $telefono = $_POST['telefono_proveedor'];
     $rif = $_POST['rif_proveedor'];
-    $stmt = $conn->prepare("INSERT INTO provedores (`nombre del proveedor`, `direccion del proveedor`, `nro de telefono del proveedor`, `rif del proveedor`) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO provedores (nombre del proveedor, direccion del proveedor, nro de telefono del proveedor, rif del proveedor) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $nombre, $direccion, $telefono, $rif);
     if ($stmt->execute()) {
         echo "<script>alert('Proveedor registrado exitosamente');</script>";
@@ -33,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 }
 ?>
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Módulo Regular - SistemaInv</title>
-    <link rel="stylesheet" href="../src/css/cajero.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
@@ -54,9 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             background: #2d3e50;
             color: #fff;
             padding-top: 30px;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
             z-index: 100;
             box-shadow: 2px 0 8px #bfc9d9;
+            overflow: hidden;
         }
         .sidebar.collapsed {
             width: 60px;
@@ -76,70 +77,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             box-shadow: 0 2px 8px #bfc9d9;
             transition: right 0.3s;
         }
-        .sidebar.collapsed .toggle-btn {
-            right: -20px;
-        }
         .sidebar h2 {
             text-align: center;
             margin-bottom: 30px;
             font-size: 1.1em;
             letter-spacing: 1px;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
         }
         .sidebar.collapsed h2 {
             opacity: 0;
-            visibility: hidden;
-            height: 0;
-            overflow: hidden;
         }
+
         .sidebar ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .sidebar ul li {
             margin: 20px 0;
-            text-align: left;
         }
+
         .sidebar ul li a {
             color: #fff;
             text-decoration: none;
             font-size: 1.08em;
-            padding: 10px 30px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
             border-radius: 4px;
             transition: background 0.2s, color 0.2s;
+            overflow: hidden;
         }
+
         .sidebar ul li a i {
             min-width: 20px;
             font-size: 1.2em;
         }
+
         .sidebar ul li a span {
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        .sidebar.collapsed ul li a span {
-            opacity: 0;
-            visibility: hidden;
-            width: 0;
+            margin-left: 10px;
+            white-space: nowrap;
+            transition: opacity 0.3s ease, max-width 0.3s ease;
+            opacity: 1;
+            max-width: 150px;
+            display: inline-block;
             overflow: hidden;
         }
-        .sidebar.collapsed ul li a {
-            justify-content: center;
+
+        .sidebar.collapsed ul li a span {
+            opacity: 0;
+            max-width: 0;
+            margin-left: 0;
         }
-        .sidebar ul li a:hover, .sidebar ul li a.active {
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
             background: #f9d923;
             color: #2d3e50;
         }
+
         .main-content {
             margin-left: 230px;
             padding: 30px 40px;
-            transition: margin-left 0.3s;
+            transition: margin-left 0.3s ease;
         }
+
         .sidebar.collapsed ~ .main-content {
             margin-left: 60px;
         }
+
         .modulo-regular-titulo {
             color: #2d3e50;
             background: #e3e7ef;
@@ -149,6 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             border-radius: 8px;
             box-shadow: 0 2px 8px #bfc9d9;
         }
+
         .pantalla {
             display: none;
             background: #fff;
@@ -158,20 +166,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             box-shadow: 0 2px 8px #bfc9d9;
             padding: 25px 30px;
         }
+
         .pantalla.active {
             display: block;
         }
+
         .pantalla h2 {
             color: #2d3e50;
             margin-bottom: 15px;
         }
-        form input, form button {
+
+        form input,
+        form button {
             margin: 8px 0;
             padding: 8px 10px;
             border-radius: 4px;
             border: 1px solid #bfc9d9;
             font-size: 1em;
         }
+
         form button {
             background: rgb(66, 107, 150);
             color: #fff;
@@ -180,10 +193,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             font-weight: bold;
             transition: background 0.2s;
         }
+
         form button:hover {
             background: #f9d923;
             color: #2d3e50;
         }
+
         @media (max-width: 800px) {
             .main-content {
                 margin-left: 60px;
@@ -203,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             sidebar.classList.toggle('collapsed');
             document.querySelector('.main-content').classList.toggle('collapsed');
         }
+
         function showScreen(screenId, link) {
             document.querySelectorAll('.pantalla').forEach(function(sec) {
                 sec.classList.remove('active');
@@ -213,45 +229,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             });
             link.classList.add('active');
         }
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('pantalla-proveedores').classList.add('active');
-            document.querySelectorAll('.sidebar ul li a[data-screen]').forEach(function(link) {
-                link.addEventListener('click', function(e) {
+            document.querySelectorAll('.sidebar ul li a[data-screen]').forEach(function (link) {
+                link.addEventListener('click', function (e) {
                     e.preventDefault();
                     showScreen(this.getAttribute('data-screen'), this);
                 });
             });
-
-            const form = document.getElementById('form-producto');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const datos = new FormData(form);
-                    fetch('../../Sistem/registrar_producto.php', {
-                        method: 'POST',
-                        body: datos
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Producto registrado exitosamente');
-                            form.reset();
-                        } else {
-                            alert('Error al registrar producto: ' + (data.message || ''));
-                        }
-                    })
-                    .catch(() => {
-                        alert('Error al registrar producto');
-                    });
-                });
-            }
         });
     </script>
 </head>
 <body>
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
-        <h2><?php echo htmlspecialchars($_SESSION['usuario']); ?><br><span style="font-size:0.8em;">Usuario Regular</span></h2>
+        <h2>Usuario<br><span style="font-size:0.8em;">Regular</span></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
@@ -262,9 +255,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             <li><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span></a></li>
         </ul>
     </div>
+
     <div class="main-content">
         <div class="modulo-regular-titulo">
-            <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
+            <h1>Bienvenido Usuario (Usuario Regular)</h1>
         </div>
         <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
@@ -317,4 +311,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
     </div>
 </body>
 </html>
+
 <?php $conn->close(); ?>
