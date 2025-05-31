@@ -179,28 +179,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             sidebar.classList.toggle('collapsed');
             document.querySelector('.main-content').classList.toggle('collapsed');
         }
-        // Mostrar solo la pantalla seleccionada
         function showScreen(screenId, link) {
             document.querySelectorAll('.pantalla').forEach(function(sec) {
                 sec.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
-            // Marcar link activo
             document.querySelectorAll('.sidebar ul li a').forEach(function(a) {
                 a.classList.remove('active');
             });
             link.classList.add('active');
         }
         document.addEventListener('DOMContentLoaded', function() {
-            // Mostrar la primera pantalla por defecto
             document.getElementById('pantalla-proveedores').classList.add('active');
-            // Asignar eventos a los links
             document.querySelectorAll('.sidebar ul li a[data-screen]').forEach(function(link) {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     showScreen(this.getAttribute('data-screen'), this);
                 });
             });
+
+            // Manejo del registro de productos vía AJAX
+            const form = document.getElementById('form-producto');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const datos = new FormData(form);
+                    fetch('../../Sistem/registrar_producto.php', {
+                        method: 'POST',
+                        body: datos
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Producto registrado exitosamente');
+                            form.reset();
+                        } else {
+                            alert('Error al registrar producto: ' + (data.message || ''));
+                        }
+                    })
+                    .catch(() => {
+                        alert('Error al registrar producto');
+                    });
+                });
+            }
         });
     </script>
 </head>
@@ -210,6 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         <h2><?php echo htmlspecialchars($_SESSION['usuario']); ?><br><span style="font-size:0.8em;">Usuario Regular</span></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-proveedores" class="active">Crear Proveedores</a></li>
+            <li><a href="#" data-screen="pantalla-productos">Registrar Productos</a></li>
             <li><a href="#" data-screen="pantalla-entrada">Registrar Entrada</a></li>
             <li><a href="#" data-screen="pantalla-salida">Registrar Salida</a></li>
             <li><a href="#" data-screen="pantalla-inventario">Inventario</a></li>
@@ -229,6 +251,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
                 <input type="text" name="telefono_proveedor" placeholder="Nro de Teléfono del proveedor" required>
                 <input type="text" name="rif_proveedor" placeholder="RIF del proveedor" required>
                 <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
+            </form>
+        </div>
+        <div id="pantalla-productos" class="pantalla">
+            <h2>Registrar Productos</h2>
+            <form id="form-producto">
+                <input type="text" name="nombre_producto" placeholder="Nombre del producto" required>
+                <input type="text" name="descripcion_producto" placeholder="Descripción" required>
+                <input type="number" step="0.01" name="precio_producto" placeholder="Precio" required>
+                <button type="submit" name="agregar_producto">Registrar Producto</button>
             </form>
         </div>
         <div id="pantalla-entrada" class="pantalla">
