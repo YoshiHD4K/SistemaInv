@@ -8,7 +8,6 @@ if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'regular') {
     exit();
 }
 
-// Conexión a la base de datos
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -18,7 +17,6 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Registrar proveedor en la tabla 'provedores'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor'])) {
     $nombre = $_POST['nombre_proveedor'];
     $direccion = $_POST['direccion_proveedor'];
@@ -40,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
     <meta charset="UTF-8">
     <title>Módulo Regular - SistemaInv</title>
     <link rel="stylesheet" href="../src/css/cajero.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
             background: #f4f6fb;
@@ -85,6 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             margin-bottom: 30px;
             font-size: 1.1em;
             letter-spacing: 1px;
+            transition: opacity 0.3s;
+        }
+        .sidebar.collapsed h2 {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
         }
         .sidebar ul {
             list-style: none;
@@ -100,9 +106,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             text-decoration: none;
             font-size: 1.08em;
             padding: 10px 30px;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             border-radius: 4px;
             transition: background 0.2s, color 0.2s;
+        }
+        .sidebar ul li a i {
+            min-width: 20px;
+            font-size: 1.2em;
+        }
+        .sidebar ul li a span {
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .sidebar.collapsed ul li a span {
+            opacity: 0;
+            visibility: hidden;
+            width: 0;
+            overflow: hidden;
+        }
+        .sidebar.collapsed ul li a {
+            justify-content: center;
         }
         .sidebar ul li a:hover, .sidebar ul li a.active {
             background: #f9d923;
@@ -149,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             font-size: 1em;
         }
         form button {
-            background:rgb(66, 107, 150);
+            background: rgb(66, 107, 150);
             color: #fff;
             border: none;
             cursor: pointer;
@@ -198,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
                 });
             });
 
-            // Manejo del registro de productos vía AJAX
             const form = document.getElementById('form-producto');
             if (form) {
                 form.addEventListener('submit', function(e) {
@@ -230,13 +253,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
         <h2><?php echo htmlspecialchars($_SESSION['usuario']); ?><br><span style="font-size:0.8em;">Usuario Regular</span></h2>
         <ul>
-            <li><a href="#" data-screen="pantalla-proveedores" class="active">Crear Proveedores</a></li>
-            <li><a href="#" data-screen="pantalla-productos">Registrar Productos</a></li>
-            <li><a href="#" data-screen="pantalla-entrada">Registrar Entrada</a></li>
-            <li><a href="#" data-screen="pantalla-salida">Registrar Salida</a></li>
-            <li><a href="#" data-screen="pantalla-inventario">Inventario</a></li>
-            <li><a href="#" data-screen="pantalla-ordenes">Ordenes de Compra</a></li>
-            <li><a href="../logout.php">Cerrar Sesión</a></li>
+            <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
+            <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
+            <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
+            <li><a href="#" data-screen="pantalla-salida"><i class="fas fa-sign-out-alt"></i><span>Registrar Salida</span></a></li>
+            <li><a href="#" data-screen="pantalla-inventario"><i class="fas fa-warehouse"></i><span>Inventario</span></a></li>
+            <li><a href="#" data-screen="pantalla-ordenes"><i class="fas fa-file-invoice"></i><span>Órdenes de Compra</span></a></li>
+            <li><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span></a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -283,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             <p>Inventario actual...</p>
         </div>
         <div id="pantalla-ordenes" class="pantalla">
-            <h2>Crear Ordenes de Compra</h2>
+            <h2>Crear Órdenes de Compra</h2>
             <form>
                 <input type="text" placeholder="Proveedor" required>
                 <input type="text" placeholder="Producto" required>
