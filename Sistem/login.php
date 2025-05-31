@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
+        // Mostrar un alert de 
         $user = $result->fetch_assoc();
         $_SESSION['usuario'] = $usuario;
         $_SESSION['tipo'] = $user['Tipo'];
@@ -33,16 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
                 window.location.href = 'cajero.php';
                 </script>";
-        } elseif ($user['Tipo'] == 'regular') {
+        }
+        // Redirigir según el tipo de usuario
+        if ($user['Tipo'] == 'regular') {
             echo "<script>
-                alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-                window.location.href = 'src\\regular.php';
-                </script>";
-        } else {
-            echo "<script>
-                alert('Tipo de usuario no reconocido.');
-                window.location.href = 'index.php';
-                </script>";
+        alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
+        window.location.href = 'src/regular.php';
+        </script>";
         }
     } else {
         // Mostrar un alert de error y redirigir a index.php

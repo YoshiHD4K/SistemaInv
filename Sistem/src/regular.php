@@ -41,9 +41,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
     <title>Módulo Regular - SistemaInv</title>
     <link rel="stylesheet" href="../src/css/cajero.css">
     <style>
-        /* Personalización para distinguir el módulo regular, pero usando la base de cajero.css */
         body {
             background: #f4f6fb;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100%;
+            background: #2d3e50;
+            color: #fff;
+            padding-top: 30px;
+            transition: width 0.3s;
+            z-index: 100;
+            box-shadow: 2px 0 8px #bfc9d9;
+        }
+        .sidebar.collapsed {
+            width: 60px;
+        }
+        .sidebar .toggle-btn {
+            position: absolute;
+            top: 15px;
+            right: -20px;
+            background: #2d3e50;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 2px 8px #bfc9d9;
+            transition: right 0.3s;
+        }
+        .sidebar.collapsed .toggle-btn {
+            right: -20px;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+            text-align: left;
+        }
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.08em;
+            padding: 10px 30px;
+            display: block;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background: #f9d923;
+            color: #2d3e50;
+        }
+        .main-content {
+            margin-left: 230px;
+            padding: 30px 40px;
+            transition: margin-left 0.3s;
+        }
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 60px;
         }
         .modulo-regular-titulo {
             color: #2d3e50;
@@ -53,30 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             text-align: center;
             border-radius: 8px;
             box-shadow: 0 2px 8px #bfc9d9;
-        }
-        .modulo-regular-nav {
-            background: #2d3e50;
-            padding: 10px 0;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px #bfc9d9;
-        }
-        .modulo-regular-nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-        }
-        .modulo-regular-nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        .modulo-regular-nav a:hover {
-            color:rgb(236, 205, 30);
         }
         section {
             background: #fff;
@@ -98,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             font-size: 1em;
         }
         form button {
-            background: #2d3e50;
+            background:rgb(66, 107, 150);
             color: #fff;
             border: none;
             cursor: pointer;
@@ -109,61 +156,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             background: #f9d923;
             color: #2d3e50;
         }
+        @media (max-width: 800px) {
+            .main-content {
+                margin-left: 60px;
+                padding: 15px 5px;
+            }
+            .sidebar {
+                width: 60px;
+            }
+            .sidebar.collapsed {
+                width: 0;
+            }
+        }
     </style>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('collapsed');
+        }
+        // Scroll to section and highlight active link
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.sidebar ul li a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({ top: target.offsetTop - 20, behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-    <div class="modulo-regular-titulo">
-        <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
-    </div>
-    <nav class="modulo-regular-nav">
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
+        <h2><?php echo htmlspecialchars($_SESSION['usuario']); ?><br><span style="font-size:0.8em;">Usuario Regular</span></h2>
         <ul>
-            <li><a href="#proveedores">Crear Proveedores</a></li>
-            <li><a href="#entrada">Registrar Entrada de Productos</a></li>
-            <li><a href="#salida">Registrar Salida de Productos</a></li>
-            <li><a href="#inventario">Manejar Inventario</a></li>
-            <li><a href="#ordenes">Crear Ordenes de Compra</a></li>
+            <li><a href="#proveedores" class="active">Crear Proveedores</a></li>
+            <li><a href="#entrada">Registrar Entrada</a></li>
+            <li><a href="#salida">Registrar Salida</a></li>
+            <li><a href="#inventario">Inventario</a></li>
+            <li><a href="#ordenes">Ordenes de Compra</a></li>
+            <li><a href="../logout.php">Cerrar Sesión</a></li>
         </ul>
-    </nav>
-    <section id="proveedores">
-        <h2>Crear Proveedores</h2>
-        <form method="post">
-            <input type="text" name="nombre_proveedor" placeholder="Nombre del proveedor" required>
-            <input type="text" name="direccion_proveedor" placeholder="Dirección del proveedor" required>
-            <input type="text" name="telefono_proveedor" placeholder="Nro de Teléfono del proveedor" required>
-            <input type="text" name="rif_proveedor" placeholder="RIF del proveedor" required>
-            <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
-        </form>
-    </section>
-    <section id="entrada">
-        <h2>Registrar Entrada de Productos</h2>
-        <form>
-            <input type="text" placeholder="Producto" required>
-            <input type="number" placeholder="Cantidad" required>
-            <button type="submit">Registrar Entrada</button>
-        </form>
-    </section>
-    <section id="salida">
-        <h2>Registrar Salida de Productos</h2>
-        <form>
-            <input type="text" placeholder="Producto" required>
-            <input type="number" placeholder="Cantidad" required>
-            <button type="submit">Registrar Salida</button>
-        </form>
-    </section>
-    <section id="inventario">
-        <h2>Manejar Inventario</h2>
-        <!-- Aquí se mostraría el inventario con opciones para editar/eliminar -->
-        <p>Inventario actual...</p>
-    </section>
-    <section id="ordenes">
-        <h2>Crear Ordenes de Compra</h2>
-        <form>
-            <input type="text" placeholder="Proveedor" required>
-            <input type="text" placeholder="Producto" required>
-            <input type="number" placeholder="Cantidad" required>
-            <button type="submit">Crear Orden</button>
-        </form>
-    </section>
+    </div>
+    <div class="main-content">
+        <div class="modulo-regular-titulo">
+            <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
+        </div>
+        <section id="proveedores">
+            <h2>Crear Proveedores</h2>
+            <form method="post">
+                <input type="text" name="nombre_proveedor" placeholder="Nombre del proveedor" required>
+                <input type="text" name="direccion_proveedor" placeholder="Dirección del proveedor" required>
+                <input type="text" name="telefono_proveedor" placeholder="Nro de Teléfono del proveedor" required>
+                <input type="text" name="rif_proveedor" placeholder="RIF del proveedor" required>
+                <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
+            </form>
+        </section>
+        <section id="entrada">
+            <h2>Registrar Entrada de Productos</h2>
+            <form>
+                <input type="text" placeholder="Producto" required>
+                <input type="number" placeholder="Cantidad" required>
+                <button type="submit">Registrar Entrada</button>
+            </form>
+        </section>
+        <section id="salida">
+            <h2>Registrar Salida de Productos</h2>
+            <form>
+                <input type="text" placeholder="Producto" required>
+                <input type="number" placeholder="Cantidad" required>
+                <button type="submit">Registrar Salida</button>
+            </form>
+        </section>
+        <section id="inventario">
+            <h2>Manejar Inventario</h2>
+            <p>Inventario actual...</p>
+        </section>
+        <section id="ordenes">
+            <h2>Crear Ordenes de Compra</h2>
+            <form>
+                <input type="text" placeholder="Proveedor" required>
+                <input type="text" placeholder="Producto" required>
+                <input type="number" placeholder="Cantidad" required>
+                <button type="submit">Crear Orden</button>
+            </form>
+        </section>
+    </div>
 </body>
 </html>
 <?php $conn->close(); ?>
