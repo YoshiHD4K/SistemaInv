@@ -35,16 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 window.location.href = 'cajero.php';
                 </script>";
         }
+        // Redirigir según el tipo de usuario
         if ($user['Tipo'] == 'regular') {
             echo "<script>
-                alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-                window.location.href = 'src/regular.php';
-                </script>";
-        }
-        else{
-            echo "<script>
-                alert('Inicio de sesión fallido');
-                </script>";
+        alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
+        window.location.href = 'src/regular.php';
+        </script>";
         }
     } else {
         // Mostrar un alert de error y redirigir a index.php
