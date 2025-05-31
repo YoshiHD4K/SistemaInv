@@ -125,7 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             border-radius: 8px;
             box-shadow: 0 2px 8px #bfc9d9;
         }
-        section {
+        .pantalla {
+            display: none;
             background: #fff;
             margin: 30px auto;
             max-width: 600px;
@@ -133,7 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             box-shadow: 0 2px 8px #bfc9d9;
             padding: 25px 30px;
         }
-        section h2 {
+        .pantalla.active {
+            display: block;
+        }
+        .pantalla h2 {
             color: #2d3e50;
             margin-bottom: 15px;
         }
@@ -175,18 +179,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             sidebar.classList.toggle('collapsed');
             document.querySelector('.main-content').classList.toggle('collapsed');
         }
-        // Scroll to section and highlight active link
+        // Mostrar solo la pantalla seleccionada
+        function showScreen(screenId, link) {
+            document.querySelectorAll('.pantalla').forEach(function(sec) {
+                sec.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            // Marcar link activo
+            document.querySelectorAll('.sidebar ul li a').forEach(function(a) {
+                a.classList.remove('active');
+            });
+            link.classList.add('active');
+        }
         document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('.sidebar ul li a');
-            links.forEach(link => {
+            // Mostrar la primera pantalla por defecto
+            document.getElementById('pantalla-proveedores').classList.add('active');
+            // Asignar eventos a los links
+            document.querySelectorAll('.sidebar ul li a[data-screen]').forEach(function(link) {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    links.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        window.scrollTo({ top: target.offsetTop - 20, behavior: 'smooth' });
-                    }
+                    showScreen(this.getAttribute('data-screen'), this);
                 });
             });
         });
@@ -197,11 +209,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
         <h2><?php echo htmlspecialchars($_SESSION['usuario']); ?><br><span style="font-size:0.8em;">Usuario Regular</span></h2>
         <ul>
-            <li><a href="#proveedores" class="active">Crear Proveedores</a></li>
-            <li><a href="#entrada">Registrar Entrada</a></li>
-            <li><a href="#salida">Registrar Salida</a></li>
-            <li><a href="#inventario">Inventario</a></li>
-            <li><a href="#ordenes">Ordenes de Compra</a></li>
+            <li><a href="#" data-screen="pantalla-proveedores" class="active">Crear Proveedores</a></li>
+            <li><a href="#" data-screen="pantalla-entrada">Registrar Entrada</a></li>
+            <li><a href="#" data-screen="pantalla-salida">Registrar Salida</a></li>
+            <li><a href="#" data-screen="pantalla-inventario">Inventario</a></li>
+            <li><a href="#" data-screen="pantalla-ordenes">Ordenes de Compra</a></li>
             <li><a href="../logout.php">Cerrar Sesión</a></li>
         </ul>
     </div>
@@ -209,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         <div class="modulo-regular-titulo">
             <h1>Bienvenido <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
         </div>
-        <section id="proveedores">
+        <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
             <form method="post">
                 <input type="text" name="nombre_proveedor" placeholder="Nombre del proveedor" required>
@@ -218,28 +230,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
                 <input type="text" name="rif_proveedor" placeholder="RIF del proveedor" required>
                 <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
             </form>
-        </section>
-        <section id="entrada">
+        </div>
+        <div id="pantalla-entrada" class="pantalla">
             <h2>Registrar Entrada de Productos</h2>
             <form>
                 <input type="text" placeholder="Producto" required>
                 <input type="number" placeholder="Cantidad" required>
                 <button type="submit">Registrar Entrada</button>
             </form>
-        </section>
-        <section id="salida">
+        </div>
+        <div id="pantalla-salida" class="pantalla">
             <h2>Registrar Salida de Productos</h2>
             <form>
                 <input type="text" placeholder="Producto" required>
                 <input type="number" placeholder="Cantidad" required>
                 <button type="submit">Registrar Salida</button>
             </form>
-        </section>
-        <section id="inventario">
+        </div>
+        <div id="pantalla-inventario" class="pantalla">
             <h2>Manejar Inventario</h2>
             <p>Inventario actual...</p>
-        </section>
-        <section id="ordenes">
+        </div>
+        <div id="pantalla-ordenes" class="pantalla">
             <h2>Crear Ordenes de Compra</h2>
             <form>
                 <input type="text" placeholder="Proveedor" required>
@@ -247,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
                 <input type="number" placeholder="Cantidad" required>
                 <button type="submit">Crear Orden</button>
             </form>
-        </section>
+        </div>
     </div>
 </body>
 </html>
