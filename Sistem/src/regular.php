@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         .sidebar .toggle-btn {
             position: absolute;
             top: 15px;
-            right: -20px;
-            background: #2d3e50;
+            right: 10px;
+            background:#f9d923;
             border: none;
             color: #fff;
             font-size: 22px;
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            box-shadow: 0 2px 8px #bfc9d9;
+    
             transition: right 0.3s;
         }
         .sidebar h2 {
@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 <body>
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
-        <h2>Usuario<br><span style="font-size:0.8em;">Regular</span></h2>
+        <h2>StockWise<br><span style="font-size:0.8em;">    </span></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 
     <div class="main-content">
         <div class="modulo-regular-titulo">
-            <h1>Bienvenido Usuario (Usuario Regular)</h1>
+            <h1>Bienvenido a StockWise (Usuario Regular)</h1>
         </div>
         <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
