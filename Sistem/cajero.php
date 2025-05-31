@@ -36,11 +36,11 @@ if (!isset($_SESSION['tipo'])) {
         </form>
         <div id="datosCliente">
             <h3>Datos del Cliente</h3>
-            <p><strong>Nombre:</strong> <span id="clienteNombre"></span></p>
-            <p><strong>Apellido:</strong> <span id="clienteApellido"></span></p>
-            <p><strong>Cédula:</strong> <span id="clienteCedula"></span></p>
-            <p><strong>Teléfono:</strong> <span id="clienteTelefono"></span></p>
-            <p><strong>Dirección:</strong> <span id="clienteDireccion"></span></p>
+            <p><strong>Nombre: </strong> <span id="clienteNombre"></span></p>
+            <p><strong>Apellido: </strong> <span id="clienteApellido"></span></p>
+            <p><strong>Cédula: </strong> <span id="clienteCedula"></span></p>
+            <p><strong>Teléfono: </strong> <span id="clienteTelefono"></span></p>
+            <p><strong>Dirección: </strong> <span id="clienteDireccion"></span></p>
         </div>
         <div class="acciones-cliente">
             <button id="btnAgregarCliente" type="button">Agregar Cliente</button>
