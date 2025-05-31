@@ -41,6 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 window.location.href = 'regular.php';
                 </script>";
         }
+        else{
+            echo "<script>
+                alert('Inicio de sesión fallido');
+                </script>";
+        }
     } else {
         // Mostrar un alert de error y redirigir a index.php
         echo "<script>
