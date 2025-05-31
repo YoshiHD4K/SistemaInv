@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($user['Tipo'] == 'regular') {
             echo "<script>
                 alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-                window.location.href = 'regular.php';
+                window.location.href = 'src\\regular.php';
                 </script>";
         } else {
             echo "<script>
