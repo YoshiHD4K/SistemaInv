@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 <body>
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
-        <h2>StockWise<br><span style="font-size:0.8em;">    </span></h2>
+        <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h1></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 
     <div class="main-content">
         <div class="modulo-regular-titulo">
-            <h1>Bienvenido a StockWise (Usuario Regular)</h1>
+            <h1> Bienvenido a StockWise <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
         </div>
         <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
