@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             transition: color 0.2s;
         }
         .modulo-regular-nav a:hover {
-            color: #f9d923;
+            color:rgb(236, 205, 30);
         }
         section {
             background: #fff;
