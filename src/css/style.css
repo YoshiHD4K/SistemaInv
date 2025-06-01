@@ -40,11 +40,15 @@ html{
     top: 0;
     left: 0;
 }
+.cabecera img {
+    height: 70px;
+}
 
 .cabecera a {
     color: white;
     text-decoration: none;
     margin: 0px 20px 0px 20px;
+    margin-right: 60px;
     
 }
 .cabecera a:hover {
