@@ -191,12 +191,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+            box-shadow:
+                0 8px 24px rgba(66, 107, 150, 0.35),   /* sombra principal más profunda */
+                0 2.5px 0 #bfc9d9;                     /* borde inferior más marcado */
+            /* Sombra para efecto 3D */
+            position: relative;
         }
 
         form button:hover {
             background: #f9d923;
             color: #2d3e50;
+            box-shadow:
+                0 12px 32px rgba(249, 217, 35, 0.35),  /* sombra más profunda al hacer hover */
+                0 4px 0 #bfc9d9;
+            transform: translateY(-3px) scale(1.06);
+        }
+
+        form button:active {
+            background: #e3e7ef;
+            color: #2d3e50;
+            box-shadow:
+                0 4px 12px rgba(66, 107, 150, 0.22),
+                0 1.5px 0 #bfc9d9;
+            transform: translateY(2px) scale(0.97);
         }
 
         @media (max-width: 800px) {
