@@ -17,12 +17,13 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
+// Registrar proveedor en la tabla 'provedores'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor'])) {
     $nombre = $_POST['nombre_proveedor'];
     $direccion = $_POST['direccion_proveedor'];
     $telefono = $_POST['telefono_proveedor'];
     $rif = $_POST['rif_proveedor'];
-    $stmt = $conn->prepare("INSERT INTO provedores (nombre del proveedor, direccion del proveedor, nro de telefono del proveedor, rif del proveedor) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO provedores (`nombre del proveedor`, `direccion del proveedor`, `nro de telefono del proveedor`, `rif del proveedor`) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $nombre, $direccion, $telefono, $rif);
     if ($stmt->execute()) {
         echo "<script>alert('Proveedor registrado exitosamente');</script>";

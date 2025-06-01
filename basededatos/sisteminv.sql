@@ -92,6 +92,31 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 
 INSERT INTO `usuarios` (`Id`, `Nombre_Usuario`, `Contraseña`, `Correo`, `Tipo`) VALUES
 (1, 'TReveron', '**TASM2077**', 'tomyreveroncito@gmail.com', 'cajero');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proveedores`
+--
+
+DROP TABLE IF EXISTS `proveedores`;
+CREATE TABLE IF NOT EXISTS `proveedores` (
+  
+  `nombre del proveedor` VARCHAR(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `direccion del proveedor` VARCHAR(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `nro de telefono del proveedor` INT(11) COLLATE utf8mb4_general_ci NOT NULL,
+  `rif_proveedor` VARCHAR(10) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`nomre del proveedor`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `proveedores`
+--
+
+INSERT INTO `proveedores` (`nombre del proveedor`, `direccion del proveedor`, `nro de telefono del proveedor`, `rif del proveedor`) VALUES
+(1, 'Proveedor1', 'Direccion1', '02121234567', 'J-12345678-9'),
+(2, 'Proveedor2', 'Direccion2', '02121234568', 'J-98765432-1');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
