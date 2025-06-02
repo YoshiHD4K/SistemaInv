@@ -29,17 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
         $_SESSION['usuario'] = $usuario;
         $_SESSION['tipo'] = $user['Tipo'];
-        if ($user['Tipo'] == 'cajero') {
-            echo "<script>
-                alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-                window.location.href = 'cajero.php';
-                </script>";
-        }
         // Redirigir según el tipo de usuario
         if ($user['Tipo'] == 'regular') {
             echo "<script>
         alert('Inicio de sesión exitoso. Bienvenido, " . htmlspecialchars($usuario) . "!');
-        window.location.href = 'src/regular.php';
+        window.location.href = 'regular.php';
         </script>";
         }
     } else {
