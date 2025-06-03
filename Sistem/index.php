@@ -15,7 +15,7 @@
     <div class="partederecha">
         <form action="login.php" method="post">
             <img src="src\images\StockWise no bg.png" alt="StockWise no bg"
-                style="display:block; margin:0 auto 0px auto; max-width:244px;">
+                style="display:block; margin:0 auto 0px auto; max-width:180px;">
             <h1>Iniciar Sesión</h1>
             <div class="textInputWrapper">
                 <input placeholder="Usuario" type="text" class="textInput" name="Usuario" required>
