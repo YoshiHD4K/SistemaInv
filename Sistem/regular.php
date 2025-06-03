@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
             <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
             <li><a href="#" data-screen="pantalla-salida"><i class="fas fa-sign-out-alt"></i><span>Registrar Salida</span></a></li>
             <li><a href="#" data-screen="pantalla-inventario"><i class="fas fa-warehouse"></i><span>Inventario</span></a></li>
-            <li><a href="#" data-screen="pantalla-ordenes"><i class="fas fa-file-invoice"></i><span>Órdenes de Compra</span></a></li>
+            <!-- <li><a href="#" data-screen="pantalla-ordenes"><i class="fas fa-file-invoice"></i><span>Órdenes de Compra</span></a></li> -->
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span></a></li>
         </ul>
     </div>
@@ -260,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
                 </tbody>
             </table>
         </div>
-        <div id="pantalla-ordenes" class="pantalla">
+        <!-- <div id="pantalla-ordenes" class="pantalla">
             <h2>Crear Órdenes de Compra</h2>
             <form>
                 <input type="text" placeholder="Proveedor" required>
@@ -268,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
                 <input type="number" placeholder="Cantidad" required>
                 <button type="submit">Crear Orden</button>
             </form>
-        </div>
+        </div> -->
     </div>
 </body>
 
