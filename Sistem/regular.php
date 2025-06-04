@@ -173,8 +173,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         .sidebar ul li a:hover, .sidebar ul li a:focus {
             background: #f9d923;
             color: #2d3e50;
-            transform: translateX(12px) scale(1.06) rotate(-2deg);
-            box-shadow: 0 4px 16px rgba(66,107,150,0.10);
+            /* Movimiento hacia adelante (escala) y ligeramente ascendente (sube) */
+            transform: translateY(-8px) scale(1.10);
+            box-shadow: 0 8px 24px rgba(66,107,150,0.12);
         }
     </style>
 </head>
