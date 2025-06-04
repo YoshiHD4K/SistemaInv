@@ -145,13 +145,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="src/css/regular.css">
     <script src="src/js/regular.js"></script>
+    <style>
+        /* Mensaje de bienvenida pequeño y en la esquina superior derecha */
+        .bienvenida-mini {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            font-size: 1em;
+            color: #2d3e50;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 6px 18px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px #bfc9d9;
+            z-index: 200;
+            margin: 0;
+        }
+
+        .main-content {
+            position: relative;
+        }
+    </style>
 </head>
 
 <body>
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
-        <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h1>
-        </h2>
+        <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
@@ -164,9 +183,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
     </div>
 
     <div class="main-content">
-        <div class="modulo-regular-titulo">
-            <h1> Bienvenido a StockWise <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
+        <div class="bienvenida-mini">
+            Bienvenido a StockWise, <?php echo htmlspecialchars($_SESSION['usuario']); ?>
         </div>
+        <!-- Elimina o comenta el h1 de bienvenida grande -->
+        <!-- <div class="modulo-regular-titulo">
+            <h1> Bienvenido a StockWise <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
+        </div> -->
         <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
             <form method="post">
