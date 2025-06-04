@@ -164,6 +164,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         .main-content {
             position: relative;
         }
+
+        /* Animación de movimiento para las opciones de la barra lateral */
+        .sidebar ul li a {
+            transition: background 0.2s, color 0.2s, transform 0.25s cubic-bezier(.4,2,.6,1);
+            /* Efecto suave y rebote */
+        }
+        .sidebar ul li a:hover, .sidebar ul li a:focus {
+            background: #f9d923;
+            color: #2d3e50;
+            transform: translateX(12px) scale(1.06) rotate(-2deg);
+            box-shadow: 0 4px 16px rgba(66,107,150,0.10);
+        }
     </style>
 </head>
 
