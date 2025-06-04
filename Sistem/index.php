@@ -6,11 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="src/css/styles-login.css">
+    <style>
+        .btn {
+            color: #000 !important;
+            /* Letras negras */
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s, transform 0.18s cubic-bezier(.4, 2, .6, 1);
+            /* Sombra y profundidad opcional */
+            box-shadow: 0 4px 16px rgba(66, 107, 150, 0.10);
+        }
+
+        .btn:hover,
+        .btn:focus {
+            color: #000 !important;
+            background: #f9d923;
+            /* Movimiento frontal y ligeramente ascendente, sin rotación */
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 16px 32px rgba(66, 107, 150, 0.22);
+        }
+    </style>
 </head>
 
 <body>
     <div class="parteizquierda">
-        <h1>Bienvenidos</h1>
+        <h1>Bienvenido</h1>
     </div>
     <div class="partederecha">
         <form action="login.php" method="post">
