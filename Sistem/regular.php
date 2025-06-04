@@ -178,6 +178,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
             box-shadow: 0 8px 24px rgba(66,107,150,0.12);
         }
     </style>
+    <style>
+        #logo-stockwise-bottom {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            width: 110px; /* Aumenta el tamaño */
+            height: auto;
+            z-index: 300;
+            opacity: 0.70; /* Más transparencia */
+            pointer-events: none;
+            background: transparent;
+            transition: opacity 0.3s;
+        }
+        #logo-stockwise-bottom:hover {
+            opacity: 0.90; /* Menos transparencia al pasar el mouse */
+        }
+    </style>
 </head>
 
 <body>
@@ -307,6 +324,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         </div> -->
     </div>
 </body>
+
+<!-- Logo en la esquina inferior derecha -->
+<img src="src/images/StockWise no bg.png" alt="StockWise Logo" id="logo-stockwise-bottom">
 
 </html>
 
