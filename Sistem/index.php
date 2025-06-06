@@ -24,6 +24,11 @@
             transform: translateY(-8px) scale(1.08);
             box-shadow: 0 16px 32px rgba(66, 107, 150, 0.22);
         }
+
+        .btn-small {
+            font-size: 110%;
+            padding: 7px 18px;
+        }
     </style>
 </head>
 
@@ -44,6 +49,7 @@
             </div>
             <a href="forgotpassword.php" class="span">Olvide mi contraseña</a>
             <button class="btn" type="submit"> Iniciar Sesión </button>
+            <button class="btn btn-small" type="button" onclick="window.location.href='http://localhost/SistemaInv'">Regresar al inicio</button>
         </form>
     </div>
 </body>
