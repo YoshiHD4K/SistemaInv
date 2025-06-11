@@ -83,7 +83,7 @@ html {
 .cabecera .button:hover,
 .button:hover {
     background: linear-gradient(90deg, #0a2239 0%, #085f92 100%);
-    box-shadow: 0 4px 24px #085f9280;
+    box-shadow: 0 4px 24px #07548180;
 }
 
 .titulo {
