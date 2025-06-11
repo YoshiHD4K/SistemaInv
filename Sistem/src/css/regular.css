@@ -2,7 +2,7 @@
   navigation: auto;
 }
 body {
-  background: #f4f6fb;
+  background: #c5c4c4c5;
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
 }
@@ -12,12 +12,12 @@ body {
   top: 0;
   width: 230px;
   height: 100%;
-  background: #2d3e50;
+  background: #232324;
   color: #fff;
   padding-top: 30px;
   transition: width 0.3s ease;
   z-index: 100;
-  box-shadow: 2px 0 8px #bfc9d9;
+  box-shadow: 2px 0 8px #ffffff;
   overflow: hidden;
 }
 .sidebar.collapsed {
@@ -27,7 +27,7 @@ body {
   position: absolute;
   top: 15px;
   right: 10px;
-  background: #f9d923;
+  background: #023ebe;
   border: none;
   color: #fff;
   font-size: 22px;
@@ -94,8 +94,8 @@ body {
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-  background: #f9d923;
-  color: #2d3e50;
+  background: #023ebe;
+  color: #ffffff;
 }
 
 .main-content {
@@ -109,7 +109,7 @@ body {
 }
 
 .modulo-regular-titulo {
-  color: #2d3e50;
+  color: #023ebe;
   background: #e3e7ef;
   padding: 20px 0 10px 0;
   margin-bottom: 20px;
@@ -133,7 +133,7 @@ body {
 }
 
 .pantalla h2 {
-  color: #2d3e50;
+  color: #023ebe;
   margin-bottom: 15px;
 }
 
@@ -153,7 +153,7 @@ form button {
 }
 
 form button {
-  background: rgb(66, 107, 150);
+  background: #023ebe;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -166,16 +166,16 @@ form button {
 }
 
 form button:hover {
-  background: #f9d923;
-  color: #2d3e50;
-  box-shadow: 0 12px 32px rgba(249, 217, 35, 0.35),
+  background: #023ebe;
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 81, 255, 0.35),
     /* sombra más profunda al hacer hover */ 0 4px 0 #bfc9d9;
   transform: translateY(-3px) scale(1.06);
 }
 
 form button:active {
   background: #e3e7ef;
-  color: #2d3e50;
+  color: #023ebe;
   box-shadow: 0 4px 12px rgba(66, 107, 150, 0.22), 0 1.5px 0 #bfc9d9;
   transform: translateY(2px) scale(0.97);
 }
@@ -192,13 +192,13 @@ form button:active {
   border: 1px solid #bfc9d9;
   font-size: 1em;
   background: #f4f6fb;
-  color: #2d3e50;
+  color: #023ebe;
   width: 90px;
   transition: border 0.2s;
 }
 
 .telefono select:focus {
-  border: 1.5px solid #f9d923;
+  border: 1.5px solid #023ebe;
   outline: none;
 }
 
@@ -209,12 +209,12 @@ form button:active {
   border: 1px solid #bfc9d9;
   font-size: 1em;
   background: #fff;
-  color: #2d3e50;
+  color: #023ebe;
   transition: border 0.2s;
 }
 
 .telefono input[type="text"]:focus {
-  border: 1.5px solid #f9d923;
+  border: 1.5px solid #023ebe;
   outline: none;
 }
 
@@ -231,13 +231,13 @@ form button:active {
   border: 1px solid #bfc9d9;
   font-size: 1em;
   background: #f4f6fb;
-  color: #2d3e50;
+  color: #023ebe;
   width: 60px;
   transition: border 0.2s;
 }
 
 .rif select:focus {
-  border: 1.5px solid #f9d923;
+  border: 1.5px solid #023ebe;
   outline: none;
 }
 
@@ -248,12 +248,12 @@ form button:active {
   border: 1px solid #bfc9d9;
   font-size: 1em;
   background: #fff;
-  color: #2d3e50;
+  color: #023ebe;
   transition: border 0.2s;
 }
 
 .rif input[type="text"]:focus {
-  border: 1.5px solid #f9d923;
+  border: 1.5px solid #023ebe;
   outline: none;
 }
 
@@ -273,13 +273,13 @@ form button:active {
   border: 1px solid #bfc9d9;
   font-size: 1em;
   background: #fff;
-  color: #2d3e50;
+  color: #023ebe;
   transition: border 0.2s;
 }
 
 .nombre input[type="text"]:focus,
 .direccion input[type="text"]:focus {
-  border: 1.5px solid #f9d923;
+  border: 1.5px solid #023ebe;
   outline: none;
 }
 
@@ -326,8 +326,8 @@ form button:active {
   font-size: 1em;
 }
 .lista-productos-autocompletar li:hover {
-  background: #f9d923;
-  color: #2d3e50;
+  background: #023ebe;
+  color: #023ebe;
 }
 .error-autocompletar {
   color: #b30000;
@@ -355,8 +355,8 @@ form button:active {
   text-align: left;
 }
 .tabla-inventario th {
-  background: #f9d923;
-  color: #2d3e50;
+  background: #023ebe;
+  color: #023ebe;
   font-weight: bold;
 }
 .tabla-inventario tr:last-child td {

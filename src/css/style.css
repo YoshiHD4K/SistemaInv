@@ -3,7 +3,7 @@ body{
     padding: 0;
     width: 100vw;
     overflow-x: hidden;
-    background-color: #333;
+    background-color: #ffffff;
 }
 
 html{
@@ -20,9 +20,13 @@ html{
     min-height: 50px;
 }
 
-.cabecera{
-    background-color: black;
-    color: white;
+.cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px;
+    background-color: #000000; /* Color de fondo negro */
+    color: #ffffff;            /* Letras blancas */
     text-align: center;
     font-size: 24px;
     font-family: Arial, sans-serif;
@@ -30,11 +34,7 @@ html{
     width: 100%;
     min-height: 50px;
     flex-direction: row;
-    display: flex;
-    align-items: center;
-    padding: 10px;
     z-index: 4;
-    justify-content: center;
     margin-bottom: 0px;
     position: fixed;
     top: 0;
@@ -52,15 +52,15 @@ html{
     
 }
 .cabecera a:hover {
-    color: #ffffff;
-    border-bottom: #e6b800 solid 3px;
+    color: #4865e9;
+    border-bottom: #0051ff solid 3px;
 }
 .cabecera a:active {
-    color: #e6b800;
-    border-bottom: #e6b800 solid 3px;
+    color: #0051ff;
+    border-bottom: #0051ff solid 3px;
 }
 .cabecera .button {
-    background-color: #ffcc00;
+    background-color: #0051ff;
     color: black;
     border: none;
     padding: 10px 20px;
@@ -72,7 +72,7 @@ html{
     border-radius: 20px;
 }
 .cabecera button:hover {
-    background-color: #e6b800;
+    background-color: #0051ffb4;
 }
 
 .titulo {
@@ -124,11 +124,11 @@ html{
 .whois {
     padding: 20px;
     background-color: transparent; /* Fondo claro */
-    color: #c4c4c4; /* Texto oscuro */
+    color: #000000; /* Texto oscuro */
     font-family: Arial, sans-serif;
     font-size: 18px;
     line-height: 1.6;
-    border-top: 5px solid #ffcc00; /* Línea decorativa superior */
+    border-top: 5px solid #0051ff; /* Línea decorativa superior */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
     margin: 150px auto;
     max-width: 800px; /* Limita el ancho para mejor legibilidad */
@@ -137,7 +137,7 @@ html{
 
 .whois h3 {
     font-size: 24px;
-    color: #ffffff; /* Título más oscuro */
+    color: #000000; /* Título más oscuro */
     margin-bottom: 10px;
     text-align: center;
 }
@@ -150,11 +150,11 @@ html{
 .contactme {
     padding: 20px;
     background-color:  transparent; /* Fondo claro */
-    color: #c4c4c4; /* Texto oscuro */
+    color: #000000; /* Texto oscuro */
     font-family: Arial, sans-serif;
     font-size: 18px;
     line-height: 1.6;
-    border-top: 5px solid #ffcc00; /* Línea decorativa superior */
+    border-top: 5px solid #0051ff; /* Línea decorativa superior */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
     margin: 150px auto;
     max-width: 800px; /* Limita el ancho para mejor legibilidad */
@@ -165,7 +165,7 @@ html{
 
 .contactme h3 {
     font-size: 24px;
-    color: #ffffff; /* Título más oscuro */
+    color: #000000; /* Título más oscuro */
     margin-bottom: 10px;
 }
 
@@ -174,21 +174,14 @@ html{
 }
 
 .contactme a {
-    color: #ffcc00; /* Color del enlace */
+    color: #0051ff; /* Color del enlace */
     text-decoration: none;
     font-weight: bold;
 }
 
 .contactme a:hover {
-    color: #e6b800; /* Color del enlace al pasar el cursor */
+    color: #0051ff; /* Color del enlace al pasar el cursor */
     text-decoration: underline;
-}
-.cabecera {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 30px;
-    background-color: #818181; /* Puedes cambiarlo según tu estilo */
 }
 
 .logo {
@@ -204,7 +197,7 @@ html{
 
 .opciones a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -218,5 +211,5 @@ html{
 }
 
 .button:hover {
-    background-color: #2b2b2b;
+    background-color: #0145c4c2;
 }

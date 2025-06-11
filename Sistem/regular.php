@@ -171,8 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
             /* Efecto suave y rebote */
         }
         .sidebar ul li a:hover, .sidebar ul li a:focus {
-            background: #f9d923;
-            color: #2d3e50;
+            background: #023ebe;
+            color: #ffffff;
             /* Movimiento hacia adelante (escala) y ligeramente ascendente (sube) */
             transform: translateY(-8px) scale(1.10);
             box-shadow: 0 8px 24px rgba(66,107,150,0.12);
