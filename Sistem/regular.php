@@ -174,19 +174,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_producto'])) 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) && isset($_POST['cantidad_entrada'])) {
     $nombre_producto = $_POST['producto_entrada'];
     $cantidad = intval($_POST['cantidad_entrada']);
-    // Buscar si el producto existe
-    $stmt = $conn->prepare("SELECT Cantidad FROM productos WHERE Nombre = ?");
+    $precio_nuevo = isset($_POST['precio_entrada']) ? floatval($_POST['precio_entrada']) : null;
+
+    // Buscar si el producto existe y obtener su precio actual
+    $stmt = $conn->prepare("SELECT Cantidad, Precio FROM productos WHERE Nombre = ?");
     $stmt->bind_param("s", $nombre_producto);
     $stmt->execute();
-    $stmt->bind_result($cantidad_actual);
+    $stmt->bind_result($cantidad_actual, $precio_actual);
     if ($stmt->fetch()) {
         $stmt->close();
         // Sumar la cantidad
         $nueva_cantidad = $cantidad_actual + $cantidad;
-        $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ? WHERE Nombre = ?");
-        $update_stmt->bind_param("is", $nueva_cantidad, $nombre_producto);
+
+        // Si se ingresó un precio y es diferente al actual, actualizar el precio
+        if ($precio_nuevo !== null && $precio_nuevo != $precio_actual) {
+            $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ?, Precio = ? WHERE Nombre = ?");
+            $update_stmt->bind_param("ids", $nueva_cantidad, $precio_nuevo, $nombre_producto);
+        } else {
+            $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ? WHERE Nombre = ?");
+            $update_stmt->bind_param("is", $nueva_cantidad, $nombre_producto);
+        }
+
         if ($update_stmt->execute()) {
             echo "<script>alert('Entrada registrada y cantidad actualizada');</script>";
+            if ($precio_nuevo !== null && $precio_nuevo != $precio_actual) {
+                echo "<script>alert('El precio del producto fue actualizado');</script>";
+            }
         } else {
             echo "<script>alert('Error al actualizar la cantidad');</script>";
         }
@@ -379,6 +392,35 @@ if (isset($_SESSION['id'])) {
                 </div>
                 <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
             </form>
+            <!-- Tabla de proveedores registrados -->
+            <h3 style="margin-top:30px;">Proveedores Registrados</h3>
+            <table class="tabla-inventario">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>RIF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $resultProv = $conn->query("SELECT Nombre, Direccion, Telefono, Rif FROM proveedores");
+                    if ($resultProv && $resultProv->num_rows > 0) {
+                        while ($prov = $resultProv->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . htmlspecialchars($prov['Nombre']) . '</td>';
+                            echo '<td>' . htmlspecialchars($prov['Direccion']) . '</td>';
+                            echo '<td>' . htmlspecialchars($prov['Telefono']) . '</td>';
+                            echo '<td>' . htmlspecialchars($prov['Rif']) . '</td>';
+                            echo '</tr>';
+                        }
+                    } else {
+                        echo '<tr><td colspan="4">No hay proveedores registrados</td></tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
         <div id="pantalla-productos" class="pantalla">
             <h2>Registrar Productos</h2>
@@ -388,15 +430,61 @@ if (isset($_SESSION['id'])) {
                 <input type="number" step="0.01" name="precio_producto" placeholder="Precio" required>
                 <button type="submit" name="agregar_producto">Registrar Producto</button>
             </form>
+            <!-- Tabla de productos registrados -->
+            <h3 style="margin-top:30px;">Productos Registrados</h3>
+            <table class="tabla-inventario">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $resultProd = $conn->query("SELECT Nombre, Descripcion, Precio FROM productos");
+                    if ($resultProd && $resultProd->num_rows > 0) {
+                        while ($prod = $resultProd->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . htmlspecialchars($prod['Nombre']) . '</td>';
+                            echo '<td>' . htmlspecialchars($prod['Descripcion']) . '</td>';
+                            echo '<td>$ ' . htmlspecialchars($prod['Precio']) . '</td>';
+                            echo '</tr>';
+                        }
+                    } else {
+                        echo '<tr><td colspan="3">No hay productos registrados</td></tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
         <div id="pantalla-entrada" class="pantalla">
             <h2>Registrar Entrada de Productos</h2>
             <form method="post">
                 <div class="autocomplete-producto">
-                    <input type="text" id="producto_entrada" name="producto_entrada" placeholder="Producto" autocomplete="off" required>
+                    <input type="text" id="producto_entrada" name="producto_entrada" placeholder="Producto" autocomplete="off" required
+                        value="<?php echo isset($_POST['producto_entrada']) ? htmlspecialchars($_POST['producto_entrada']) : ''; ?>">
                     <div id="busqueda-productos" class="busqueda-productos"></div>
                 </div>
-                <input type="number" name="cantidad_entrada" placeholder="Cantidad" required>
+                <input type="number" name="cantidad_entrada" placeholder="Cantidad" required
+                    value="<?php echo isset($_POST['cantidad_entrada']) ? htmlspecialchars($_POST['cantidad_entrada']) : ''; ?>">
+                <?php
+                // Mostrar el precio actual si el producto existe
+                $precio_mostrar = '';
+                if (isset($_POST['producto_entrada']) && $_POST['producto_entrada'] !== '') {
+                    $nombre_producto = $_POST['producto_entrada'];
+                    $stmt = $conn->prepare("SELECT Precio FROM productos WHERE Nombre = ?");
+                    $stmt->bind_param("s", $nombre_producto);
+                    $stmt->execute();
+                    $stmt->bind_result($precio_bd);
+                    if ($stmt->fetch()) {
+                        $precio_mostrar = $precio_bd;
+                    }
+                    $stmt->close();
+                }
+                ?>
+                <input type="number" step="0.01" name="precio_entrada" placeholder="Precio" 
+                    value="<?php echo htmlspecialchars($precio_mostrar); ?>" required>
                 <button type="submit">Registrar Entrada</button>
             </form>
         </div>
