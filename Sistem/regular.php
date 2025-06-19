@@ -327,7 +327,7 @@ if (isset($_SESSION['id'])) {
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
         <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h2>
         <ul>
-            <li><a href="#" data-screen="pantalla-dashboard"><i class="active"></i><span>Dashboard</span></a></li>
+            <li><a href="#" data-screen="pantalla-dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
             <li><a href="#" data-screen="pantalla-proveedores"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
             <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
