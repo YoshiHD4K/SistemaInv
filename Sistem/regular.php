@@ -726,7 +726,7 @@ if (isset($_SESSION['id'])) {
     opacity: 0.92;
     pointer-events: none;
     ">
-    @ 2025, Made with <span style="color:#e25555;">&#10084;&#65039;</span>
+    @ 2025 USM, Made with <span style="color:#e25555;">&#10084;&#65039;</span>
 </div>
 
 </html>
