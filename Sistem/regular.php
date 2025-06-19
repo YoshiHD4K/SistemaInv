@@ -133,7 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
         $stmt = $conn->prepare("INSERT INTO proveedores (`Nombre`, `Direccion`, `Telefono`, `Rif`) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $nombre, $direccion, $telefono, $rif);
         if ($stmt->execute()) {
-            echo "<script>alert('Proveedor registrado exitosamente');</script>";
+            echo "<script>alert('Proveedor registrado exitosamente');window.location.href=window.location.href;</script>";
+            exit();
         } else {
             echo "<script>alert('Error al registrar proveedor');</script>";
         }
@@ -142,7 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor']))
 }
 
 // Registrar producto en la tabla 'Productos'
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_producto'])) {
     $nombre_producto = $_POST['nombre_producto'];
     $descripcion_producto = $_POST['descripcion_producto'];
@@ -162,7 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_producto'])) 
         $stmt = $conn->prepare("INSERT INTO productos (Nombre, Descripcion, Precio) VALUES (?, ?, ?)");
         $stmt->bind_param("ssd", $nombre_producto, $descripcion_producto, $precio_producto);
         if ($stmt->execute()) {
-            echo "<script>alert('Producto registrado exitosamente');</script>";
+            echo "<script>alert('Producto registrado exitosamente');window.location.href=window.location.href;</script>";
+            exit();
         } else {
             echo "<script>alert('Error al registrar producto');</script>";
         }
@@ -171,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_producto'])) 
 }
 
 // Registrar entrada de productos
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) && isset($_POST['cantidad_entrada'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) && isset($_POST['cantidad_entrada']) && !isset($_POST['agregar_producto']) && !isset($_POST['agregar_proveedor'])) {
     $nombre_producto = $_POST['producto_entrada'];
     $cantidad = intval($_POST['cantidad_entrada']);
     $precio_nuevo = isset($_POST['precio_entrada']) ? floatval($_POST['precio_entrada']) : null;
@@ -196,10 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) &
         }
 
         if ($update_stmt->execute()) {
-            echo "<script>alert('Entrada registrada y cantidad actualizada');</script>";
-            if ($precio_nuevo !== null && $precio_nuevo != $precio_actual) {
-                echo "<script>alert('El precio del producto fue actualizado');</script>";
-            }
+            echo "<script>alert('Entrada registrada y cantidad actualizada');window.location.href=window.location.href;</script>";
+            exit();
         } else {
             echo "<script>alert('Error al actualizar la cantidad');</script>";
         }
@@ -229,7 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
             $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ? WHERE Nombre = ?");
             $update_stmt->bind_param("is", $nueva_cantidad, $nombre_producto);
             if ($update_stmt->execute()) {
-                echo "<script>alert('Salida registrada y cantidad actualizada');</script>";
+                echo "<script>alert('Salida registrada y cantidad actualizada');window.location.href=window.location.href;</script>";
+                exit();
             } else {
                 echo "<script>alert('Error al actualizar la cantidad');</script>";
             }
