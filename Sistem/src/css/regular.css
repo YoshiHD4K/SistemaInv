@@ -1,11 +1,23 @@
 @view-transition {
   navigation: auto;
 }
+/* Fondo degradado animado */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f0f4f8;
+  background: linear-gradient(120deg, #f0f4f8 0%, #e3e7ef 100%);
   margin: 0;
   padding: 20px;
+  /* Fondo animado */
+  background-size: 100% 300%;
+  background-position: 0 0;
+  transition: background-position 0.3s;
+  /* Para suavizar el movimiento */
+  will-change: background-position;
+}
+
+/* Efecto de movimiento del degradado al hacer scroll */
+body.scrolling-gradient {
+  /* El background-position se actualizará dinámicamente con JS */
 }
 
 .sidebar {
@@ -14,7 +26,7 @@ body {
   top: 0;
   width: 230px;
   height: 100%;
-  background: #232324;
+  background: #232324e0;
   color: #fff;
   padding-top: 30px;
   transition: width 0.3s ease;

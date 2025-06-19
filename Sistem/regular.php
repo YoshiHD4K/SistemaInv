@@ -635,3 +635,15 @@ if (isset($_SESSION['id'])) {
 </html>
 
 <?php $conn->close(); ?>
+
+<script>
+document.addEventListener('scroll', function() {
+    // Calcula el porcentaje de scroll vertical
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const percent = docHeight > 0 ? scrollTop / docHeight : 0;
+    // Mueve el fondo en función del scroll
+    document.body.style.backgroundPosition = `0 ${percent * 100}%`;
+    document.body.classList.add('scrolling-gradient');
+});
+</script>
