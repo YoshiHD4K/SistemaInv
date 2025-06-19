@@ -66,7 +66,7 @@ function mostrarDashboard($conn) {
 
     // Renderizar las tarjetas
     echo '<div class="dashboard-panel">';
-    echo '<h2>Dashboard 📊</h2>';
+    echo '<h2><i class="fas fa-tachometer-alt"></i> DASHBOARD</h2>';
     echo '<div class="cards-container">';
     // Tarjeta: total proveedores
     echo '<div class="card">';
@@ -107,6 +107,94 @@ function mostrarDashboard($conn) {
     }
 
     echo '</div>'; // .dashboard-panel
+
+    // --- GRÁFICO DE INVENTARIO ---
+    // Obtener productos con más y menos inventario (top 5 y bottom 5)
+    $productos_mas = [];
+    $productos_menos = [];
+    $resMas = $conn->query("SELECT Nombre, Cantidad FROM productos ORDER BY Cantidad DESC LIMIT 5");
+    while ($row = $resMas->fetch_assoc()) {
+        $productos_mas[] = $row;
+    }
+    $resMenos = $conn->query("SELECT Nombre, Cantidad FROM productos ORDER BY Cantidad ASC LIMIT 5");
+    while ($row = $resMenos->fetch_assoc()) {
+        $productos_menos[] = $row;
+    }
+
+    // Preparar datos para JS
+    $labels_mas = [];
+    $data_mas = [];
+    foreach ($productos_mas as $p) {
+        $labels_mas[] = $p['Nombre'];
+        $data_mas[] = intval($p['Cantidad']);
+    }
+    $labels_menos = [];
+    $data_menos = [];
+    foreach ($productos_menos as $p) {
+        $labels_menos[] = $p['Nombre'];
+        $data_menos[] = intval($p['Cantidad']);
+    }
+
+    echo '<div style="margin:32px 0 32px 0;display:flex;flex-wrap:wrap;gap:40px;">';
+    echo '<div style="flex:1;min-width:320px;">';
+    echo '<h3 style="margin-bottom:10px;">Top 5 productos con más inventario</h3>';
+    echo '<canvas id="graficoMasInventario" height="180"></canvas>';
+    echo '</div>';
+    echo '<div style="flex:1;min-width:320px;">';
+    echo '<h3 style="margin-bottom:10px;">Top 5 productos con menos inventario</h3>';
+    echo '<canvas id="graficoMenosInventario" height="180"></canvas>';
+    echo '</div>';
+    echo '</div>';
+
+    // Pasar datos a JS
+    echo '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Más inventario
+            new Chart(document.getElementById("graficoMasInventario").getContext("2d"), {
+                type: "bar",
+                data: {
+                    labels: ' . json_encode($labels_mas) . ',
+                    datasets: [{
+                        label: "Cantidad",
+                        data: ' . json_encode($data_mas) . ',
+                        backgroundColor: "#2196F3"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+            // Menos inventario
+            new Chart(document.getElementById("graficoMenosInventario").getContext("2d"), {
+                type: "bar",
+                data: {
+                    labels: ' . json_encode($labels_menos) . ',
+                    datasets: [{
+                        label: "Cantidad",
+                        data: ' . json_encode($data_menos) . ',
+                        backgroundColor: "#FF9800"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        });
+    </script>';
+    
 }
 // --- FIN DASHBOARD MÉTRICAS ---
 
