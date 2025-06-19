@@ -2,10 +2,12 @@
   navigation: auto;
 }
 body {
-  background: #c5c4c4c5;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f4f8;
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
+  padding: 20px;
 }
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -364,6 +366,98 @@ form button:active {
 }
 .tabla-inventario tr:hover {
   background: #f4f6fb;
+}
+
+/* Dashboard styles */
+.dashboard-container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.dashboard-container h1 {
+    color: #333;
+}
+
+.dashboard-card {
+    background: #e9f5ff;
+    padding: 20px;
+    margin-top: 20px;
+    border-left: 5px solid #2196F3;
+    border-radius: 8px;
+}
+
+.dashboard-links a {
+    display: inline-block;
+    margin: 15px 10px 0 0;
+    text-decoration: none;
+    color: #2196F3;
+    font-weight: bold;
+}
+
+/* Contenedor general del Dashboard */
+.dashboard-panel {
+    padding: 20px;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Tarjeta individual */
+.card {
+    background: #e9f5ff;
+    border-left: 4px solid #2196F3;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1em;
+    color: #023ebe;
+}
+
+.card .metric {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2d3e50;
+}
+
+/* Alerta de bajo stock */
+.low-stock-alert {
+    background: #fff4e5;
+    border-left: 4px solid #ff9800;
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.low-stock-alert.ok {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.low-stock-alert h4 {
+    margin: 0 0 6px 0;
+}
+
+.low-stock-alert ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.low-stock-alert p {
+    margin: 0;
+    color: #2d3e50;
 }
 
 @media (max-width: 800px) {

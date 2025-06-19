@@ -17,6 +17,99 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
+// --- DASHBOARD MÉTRICAS ---
+/**
+ * Muestra el Dashboard con métricas clave.
+ * @param mysqli $conn Conexión activa a la BD.
+ */
+function mostrarDashboard($conn) {
+    // Total de proveedores
+    $totalProv = 0;
+    $res = $conn->query("SELECT COUNT(*) AS cnt FROM proveedores");
+    if ($res && $row = $res->fetch_assoc()) {
+        $totalProv = intval($row['cnt']);
+    }
+
+    // Total de productos
+    $totalProd = 0;
+    $res = $conn->query("SELECT COUNT(*) AS cnt FROM productos");
+    if ($res && $row = $res->fetch_assoc()) {
+        $totalProd = intval($row['cnt']);
+    }
+
+    // Stock total (suma de Cantidad)
+    $stockTotal = 0;
+    $res = $conn->query("SELECT SUM(Cantidad) AS suma FROM productos");
+    if ($res && $row = $res->fetch_assoc()) {
+        $stockTotal = intval($row['suma']);
+    }
+
+    // Valor aproximado de inventario: SUM(Precio * Cantidad)
+    $valorInv = 0.0;
+    $res = $conn->query("SELECT SUM(Precio * Cantidad) AS valor FROM productos");
+    if ($res && $row = $res->fetch_assoc()) {
+        $valorInv = floatval($row['valor']);
+    }
+
+    // Productos bajos en stock
+    $umbral = 5;
+    $bajos = [];
+    $stmt = $conn->prepare("SELECT Nombre, Cantidad FROM productos WHERE Cantidad < ?");
+    $stmt->bind_param("i", $umbral);
+    if ($stmt->execute()) {
+        $res2 = $stmt->get_result();
+        while ($r = $res2->fetch_assoc()) {
+            $bajos[] = $r;
+        }
+    }
+    $stmt->close();
+
+    // Renderizar las tarjetas
+    echo '<div class="dashboard-panel">';
+    echo '<h2>Dashboard 📊</h2>';
+    echo '<div class="cards-container">';
+    // Tarjeta: total proveedores
+    echo '<div class="card">';
+    echo '<h3>Proveedores</h3>';
+    echo '<p class="metric">' . htmlspecialchars($totalProv) . '</p>';
+    echo '</div>';
+    // Tarjeta: total productos
+    echo '<div class="card">';
+    echo '<h3>Productos</h3>';
+    echo '<p class="metric">' . htmlspecialchars($totalProd) . '</p>';
+    echo '</div>';
+    // Tarjeta: stock total
+    echo '<div class="card">';
+    echo '<h3>Stock Total</h3>';
+    echo '<p class="metric">' . htmlspecialchars($stockTotal) . '</p>';
+    echo '</div>';
+    // Tarjeta: valor inventario
+    echo '<div class="card">';
+    echo '<h3>Valor Inventario</h3>';
+    echo '<p class="metric">$ ' . number_format($valorInv, 2, ',', '.') . '</p>';
+    echo '</div>';
+    echo '</div>'; // .cards-container
+
+    // Si hay productos bajos en stock, mostrar breve alerta o lista pequeña
+    if (!empty($bajos)) {
+        echo '<div class="low-stock-alert">';
+        echo '<h4>Productos con stock < ' . $umbral . '</h4>';
+        echo '<ul>';
+        foreach ($bajos as $item) {
+            echo '<li>' . htmlspecialchars($item['Nombre']) . ' ('.intval($item['Cantidad']).')</li>';
+        }
+        echo '</ul>';
+        echo '</div>';
+    } else {
+        echo '<div class="low-stock-alert ok">';
+        echo '<p>Todos los productos con stock suficiente 👍</p>';
+        echo '</div>';
+    }
+
+    echo '</div>'; // .dashboard-panel
+}
+// --- FIN DASHBOARD MÉTRICAS ---
+
 // Registrar proveedor en la tabla 'Proveedores'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_proveedor'])) {
     $nombre = $_POST['nombre_proveedor'];
@@ -134,6 +227,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         echo "<script>alert('Producto no encontrado');</script>";
     }
 }
+
+// --- INICIO Dashboard de Usuario ---
+$sqlPedidos = "SELECT COUNT(*) as total_pedidos FROM pedidos WHERE id_usuario = ?";
+$sqlUsuario = "SELECT nombre FROM usuarios WHERE id = ?";
+
+$totalPedidos = 0;
+$nombreUsuario = "Usuario";
+
+if (isset($_SESSION['id'])) {
+    // Consulta de pedidos
+    $stmtPedidos = $conn->prepare($sqlPedidos);
+    $stmtPedidos->bind_param("i", $_SESSION['id']);
+    $stmtPedidos->execute();
+    $resultPedidos = $stmtPedidos->get_result();
+    if ($resultPedidos && $resultPedidos->num_rows > 0) {
+        $row = $resultPedidos->fetch_assoc();
+        $totalPedidos = $row['total_pedidos'];
+    }
+    $stmtPedidos->close();
+
+    // Consulta de nombre de usuario
+    $stmtUsuario = $conn->prepare($sqlUsuario);
+    $stmtUsuario->bind_param("i", $_SESSION['id']);
+    $stmtUsuario->execute();
+    $resultUsuario = $stmtUsuario->get_result();
+    if ($resultUsuario && $resultUsuario->num_rows > 0) {
+        $row = $resultUsuario->fetch_assoc();
+        $nombreUsuario = $row['nombre'];
+    }
+    $stmtUsuario->close();
+}
+// --- FIN Dashboard de Usuario ---
 ?>
 <!DOCTYPE html>
 <!DOCTYPE html>
@@ -202,12 +327,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         <button class="toggle-btn" onclick="toggleSidebar()" title="Expandir/Colapsar menú">&#9776;</button>
         <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h2>
         <ul>
-            <li><a href="#" data-screen="pantalla-proveedores" class="active"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
+            <li><a href="#" data-screen="pantalla-dashboard"><i class="active"></i><span>Dashboard</span></a></li>
+            <li><a href="#" data-screen="pantalla-proveedores"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
             <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
             <li><a href="#" data-screen="pantalla-salida"><i class="fas fa-sign-out-alt"></i><span>Registrar Salida</span></a></li>
             <li><a href="#" data-screen="pantalla-inventario"><i class="fas fa-warehouse"></i><span>Inventario</span></a></li>
-            <!-- <li><a href="#" data-screen="pantalla-ordenes"><i class="fas fa-file-invoice"></i><span>Órdenes de Compra</span></a></li> -->
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span></a></li>
         </ul>
     </div>
@@ -220,6 +345,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
         <!-- <div class="modulo-regular-titulo">
             <h1> Bienvenido a StockWise <?php echo htmlspecialchars($_SESSION['usuario']); ?> (Usuario Regular)</h1>
         </div> -->
+        <div id="pantalla-dashboard" class="pantalla">
+            <?php mostrarDashboard($conn); ?>
+        </div>
         <div id="pantalla-proveedores" class="pantalla">
             <h2>Crear Proveedores</h2>
             <form method="post">

@@ -16,7 +16,7 @@ function showScreen(screenId, link) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('pantalla-proveedores').classList.add('active');
+    document.getElementById('pantalla-dashboard').classList.add('active'); // Cambia aquÃ­
     document.querySelectorAll('.sidebar ul li a[data-screen]').forEach(function (link) {
         link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // MOVER EL BLOQUE DE AUTOCOMPLETADO AQUÍ PARA QUE SE EJECUTE SOLO CUANDO EL DOM ESTÉ LISTO
+    // MOVER EL BLOQUE DE AUTOCOMPLETADO AQUï¿½ PARA QUE SE EJECUTE SOLO CUANDO EL DOM ESTï¿½ LISTO
     const inputProducto = document.getElementById('producto_entrada');
     const divBusqueda = document.getElementById('busqueda-productos');
     let listaDesplegable = null;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     divBusqueda.appendChild(listaDesplegable);
                 })
                 .catch(err => {
-                    divBusqueda.innerHTML = '<div class="error-autocompletar">Error de conexión o respuesta inválida</div>';
+                    divBusqueda.innerHTML = '<div class="error-autocompletar">Error de conexiï¿½n o respuesta invï¿½lida</div>';
                 });
         });
         document.addEventListener('mousedown', function (e) {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     divBusquedaSalida.appendChild(listaDesplegableSalida);
                 })
                 .catch(err => {
-                    divBusquedaSalida.innerHTML = '<div class="error-autocompletar">Error de conexión o respuesta inválida</div>';
+                    divBusquedaSalida.innerHTML = '<div class="error-autocompletar">Error de conexiï¿½n o respuesta invï¿½lida</div>';
                 });
         });
         document.addEventListener('mousedown', function (e) {
