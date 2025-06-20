@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['correo'])) {
             $mail->Port = 587;
 
             // Configuración del correo
-            $mail->setFrom('sistemainventario30@gmail.com', 'Sistema Inventario'); // Remitente
+            $mail->setFrom('sistemainventario30@gmail.com', 'StockWise'); // Remitente
             $mail->addAddress($correo); // Destinatario
 
             $mail->isHTML(true);
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['correo'])) {
                         Si no solicitaste esto, ignora este correo. Si tienes alguna duda, contáctanos.
                     </p>
                     <footer style='text-align: center; margin-top: 20px; font-size: 12px; color: #888;'>
-                        <p>© 2025 SistemaInv. Todos los derechos reservados.</p>
+                        <p>© 2025 StockWise. Todos los derechos reservados.</p>
                     </footer>
                 </div>";
 
