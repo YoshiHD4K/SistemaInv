@@ -725,7 +725,7 @@ document.addEventListener('scroll', function() {
         const fechaHora = fecha.toLocaleString();
 
         const logoImg = new Image();
-        logoImg.src = 'src/images/StockWise no bg.png'; // Ajusta la ruta si es diferente
+        logoImg.src = 'src/images/StockWise 4 white bg.png'; // Ajusta la ruta si es diferente
 
         logoImg.onload = () => {
             html2canvas(tabla, {
@@ -771,7 +771,7 @@ document.addEventListener('scroll', function() {
         const fechaHora = fecha.toLocaleString();
 
         const logoImg = new Image();
-        logoImg.src = 'src/images/StockWise no bg.png'; // Verifica esta ruta
+        logoImg.src = 'src/images/StockWise 4 white bg.png'; // Verifica esta ruta
 
         logoImg.onload = () => {
             html2canvas(tabla, {
