@@ -619,119 +619,78 @@ if (isset($_SESSION['id'])) {
             </table>
         </div>
         <div id="pantalla-configuracion" class="pantalla">
-            <h2><i class="fas fa-cog"></i> Configuración de Usuario</h2>
-            <?php
-            // Procesar cambios de configuración
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_configuracion'])) {
-                $nuevo_correo = trim($_POST['nuevo_correo']);
-                $nueva_contra = $_POST['nueva_contra'];
-                $confirmar_contra = $_POST['confirmar_contra'];
-                $errores = [];
-
-                // Validar correo solo si se quiere cambiar
-                if (!empty($nuevo_correo)) {
-                    if (!filter_var($nuevo_correo, FILTER_VALIDATE_EMAIL)) {
-                        $errores[] = "Correo electrónico no válido.";
-                    }
-                }
-
-                // Validar contraseña si se quiere cambiar
-                if (!empty($nueva_contra) || !empty($confirmar_contra)) {
-                    // Obtener la contraseña actual del usuario
-                    $stmt = $conn->prepare("SELECT password FROM usuarios WHERE id = ?");
-                    $stmt->bind_param("i", $_SESSION['id']);
-                    $stmt->execute();
-                    $stmt->bind_result($hash_actual);
-                    $stmt->fetch();
-                    $stmt->close();
-
-                    // Validar que la confirmación coincida
-                    if ($nueva_contra !== $confirmar_contra) {
-                        $errores[] = "Las contraseñas no coinciden.";
-                    } elseif (strlen($nueva_contra) < 6) {
-                        $errores[] = "La nueva contraseña debe tener al menos 6 caracteres.";
-                    } elseif (password_verify($nueva_contra, $hash_actual)) {
-                        $errores[] = "La nueva contraseña no puede ser igual a la anterior.";
-                    }
-                }
-
-                if (empty($errores)) {
-                    // Actualizar correo solo si se ingresó uno nuevo
-                    if (!empty($nuevo_correo)) {
-                        $stmt = $conn->prepare("UPDATE usuarios SET correo = ? WHERE id = ?");
-                        $stmt->bind_param("si", $nuevo_correo, $_SESSION['id']);
-                        $stmt->execute();
-                        $stmt->close();
-                    }
-
-                    // Actualizar contraseña si corresponde
-                    if (!empty($nueva_contra)) {
-                        $hash = password_hash($nueva_contra, PASSWORD_DEFAULT);
-                        $stmt = $conn->prepare("UPDATE usuarios SET password = ? WHERE id = ?");
-                        $stmt->bind_param("si", $hash, $_SESSION['id']);
-                        $stmt->execute();
-                        $stmt->close();
-                        echo "<script>alert('Cambio de contraseña exitoso');window.location.href=window.location.href;</script>";
-                        exit();
-                    } else if (!empty($nuevo_correo)) {
-                        echo "<script>alert('Correo actualizado correctamente');window.location.href=window.location.href;</script>";
-                        exit();
-                    } else {
-                        echo "<script>alert('No se realizaron cambios');window.location.href=window.location.href;</script>";
-                        exit();
-                    }
-                } else {
-                    echo '<div style="color:#c00; margin-bottom:12px;">'.implode("<br>", $errores).'</div>';
-                }
-            }
-
-            // Obtener correo actual
-            $correo_actual = "";
-            $stmt = $conn->prepare("SELECT correo FROM usuarios WHERE id = ?");
-            $stmt->bind_param("i", $_SESSION['id']);
-            $stmt->execute();
-            $stmt->bind_result($correo_actual);
-            $stmt->fetch();
-            $stmt->close();
-            ?>
-            <form method="post" style="max-width:400px;">
-                <label for="nuevo_correo">Correo electrónico (opcional):</label>
-                <input type="email" id="nuevo_correo" name="nuevo_correo" placeholder="Dejar en blanco para no cambiar" value="">
-                <small style="color:#888;display:block;margin-bottom:10px;">Actual: <?php echo htmlspecialchars($correo_actual); ?></small>
-                <label for="nueva_contra">Nueva contraseña:</label>
-                <input type="password" id="nueva_contra" name="nueva_contra" placeholder="Dejar en blanco para no cambiar">
-                <label for="confirmar_contra">Confirmar nueva contraseña:</label>
-                <input type="password" id="confirmar_contra" name="confirmar_contra" placeholder="Dejar en blanco para no cambiar">
-                <button type="submit" name="guardar_configuracion">Guardar Cambios</button>
+            <h2>Configuración de Usuario - Cambiar Contraseña</h2>
+            <form method="post">
+                <input type="password" name="contrasena_actual" placeholder="Contraseña Actual" required>
+                <input type="password" name="nueva_contrasena" placeholder="Nueva Contraseña" minlength="6" required>
+                <input type="password" name="confirmar_contrasena" placeholder="Confirmar Nueva Contraseña" required>
+                <button type="submit" name="cambiar_contrasena">Cambiar Contraseña</button>
             </form>
         </div>
     </div>
+
+    <!-- Logo en la esquina inferior derecha -->
+    <img src="src/images/StockWise no bg.png" alt="StockWise Logo" id="logo-stockwise-bottom">
+
+    <!-- Mensaje de copyright -->
+    <div id="footer-msg" style="
+        position: fixed;
+        left: 24px;
+        bottom: 22px;
+        font-size: 1.08em;
+        color: #2d3e50;
+        background: rgba(255,255,255,0.85);
+        padding: 7px 18px 7px 14px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #bfc9d9;
+        z-index: 301;
+        opacity: 0.92;
+        pointer-events: none;
+        ">
+        @ 2025 USM, Made with <span style="color:#e25555;">&#10084;&#65039;</span>
+    </div>
+
 </body>
 
-<!-- Logo en la esquina inferior derecha -->
-<img src="src/images/StockWise no bg.png" alt="StockWise Logo" id="logo-stockwise-bottom">
+<?php
+// Cambiar contraseña
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cambiar_contrasena'])) {
+    $usuario = $_SESSION['usuario'];
+    $actual = $_POST['contrasena_actual'];
+    $nueva = $_POST['nueva_contrasena'];
+    $confirmar = $_POST['confirmar_contrasena'];
 
-<!-- Mensaje de copyright -->
-<div id="footer-msg" style="
-    position: fixed;
-    left: 24px;
-    bottom: 22px;
-    font-size: 1.08em;
-    color: #2d3e50;
-    background: rgba(255,255,255,0.85);
-    padding: 7px 18px 7px 14px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px #bfc9d9;
-    z-index: 301;
-    opacity: 0.92;
-    pointer-events: none;
-    ">
-    @ 2025 USM, Made with <span style="color:#e25555;">&#10084;&#65039;</span>
-</div>
-
-</html>
-
-<?php $conn->close(); ?>
+    if (strlen($nueva) < 6) {
+        echo "<script>alert('La nueva contraseña debe tener al menos 6 caracteres.');</script>";
+    } elseif ($nueva !== $confirmar) {
+        echo "<script>alert('La confirmación no coincide con la nueva contraseña.');</script>";
+    } else {
+        $stmt = $conn->prepare("SELECT Contraseña FROM usuarios WHERE `Nombre_Usuario` = ?");
+        $stmt->bind_param("s", $usuario);
+        $stmt->execute();
+        $stmt->bind_result($contrasena_bd);
+        if ($stmt->fetch()) {
+            $stmt->close();
+            if ($actual === $contrasena_bd) {
+                $update_stmt = $conn->prepare("UPDATE usuarios SET Contraseña = ? WHERE `Nombre_Usuario` = ?");
+                $update_stmt->bind_param("ss", $nueva, $usuario);
+                if ($update_stmt->execute()) {
+                    echo "<script>alert('Cambio de contraseña exitoso.');</script>";
+                } else {
+                    echo "<script>alert('Error al actualizar la contraseña.');</script>";
+                }
+                $update_stmt->close();
+            } else {
+                echo "<script>alert('La contraseña actual es incorrecta.');</script>";
+            }
+        } else {
+            echo "<script>alert('Usuario no encontrado.');</script>";
+        }
+    }
+}
+?><?php
+$conn->close();
+?>
 
 <script>
 document.addEventListener('scroll', function() {
@@ -744,3 +703,5 @@ document.addEventListener('scroll', function() {
     document.body.classList.add('scrolling-gradient');
 });
 </script>
+
+</html>
