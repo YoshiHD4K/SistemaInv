@@ -429,7 +429,7 @@ if (isset($_SESSION['id'])) {
         <h2>StockWise<br><span style="font-size:0.8em;"> </span> <?php echo htmlspecialchars($_SESSION['usuario']); ?></h2>
         <ul>
             <li><a href="#" data-screen="pantalla-dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
-            <li><a href="#" data-screen="pantalla-proveedores"><i class="fas fa-truck"></i><span>Crear Proveedores</span></a></li>
+            <li><a href="#" data-screen="pantalla-proveedores"><i class="fas fa-truck"></i><span>Proveedores</span></a></li>
             <li><a href="#" data-screen="pantalla-productos"><i class="fas fa-box-open"></i><span>Registrar Productos</span></a></li>
             <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
             <li><a href="#" data-screen="pantalla-salida"><i class="fas fa-sign-out-alt"></i><span>Registrar Salida</span></a></li>
@@ -635,7 +635,7 @@ if (isset($_SESSION['id'])) {
     <!-- Mensaje de copyright -->
     <div id="footer-msg" style="
         position: fixed;
-        left: 24px;
+        left: 250px;
         bottom: 22px;
         font-size: 1.08em;
         color: #2d3e50;
@@ -647,7 +647,7 @@ if (isset($_SESSION['id'])) {
         opacity: 0.92;
         pointer-events: none;
         ">
-        @ 2025 USM, Made with <span style="color:#e25555;">&#10084;&#65039;</span>
+        2025 Stockwise &#169
     </div>
 
 </body>
