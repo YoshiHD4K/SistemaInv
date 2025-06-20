@@ -647,7 +647,7 @@ if (isset($_SESSION['id'])) {
         opacity: 0.92;
         pointer-events: none;
         ">
-        2025 Stockwise &#169
+        2025 StockWise &#169
     </div>
 
 </body>
