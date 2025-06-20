@@ -364,6 +364,8 @@ if (isset($_SESSION['id'])) {
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="es">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <head>
     <meta charset="UTF-8">
@@ -482,8 +484,13 @@ if (isset($_SESSION['id'])) {
                 <button type="submit" name="agregar_proveedor">Agregar Proveedor</button>
             </form>
             <!-- Tabla de proveedores registrados -->
+             <button onclick="generarPDFProveedores()" style="background-color: #023ebe; color: white; padding: 10px 18px; margin-top: 20px; margin-bottom: 10px; border: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-file-pdf"></i> Descargar Proveedores en PDF
+</button>
+
             <h3 style="margin-top:30px;">Proveedores Registrados</h3>
-            <table class="tabla-inventario">
+            <table id="tabla-proveedores" class="tabla-inventario">
+
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -590,7 +597,12 @@ if (isset($_SESSION['id'])) {
         </div>
         <div id="pantalla-inventario" class="pantalla">
             <h2>Manejar Inventario</h2>
-            <table class="tabla-inventario">
+            <button onclick="generarPDFInventario()" style="background-color: #023ebe; color: white; padding: 10px 18px; margin-bottom: 18px; border: none; border-radius: 5px; cursor: pointer;">
+    <i class="fas fa-file-pdf"></i> Descargar Inventario en PDF
+</button>
+
+            <table id="tabla-inventario" class="tabla-inventario">
+
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -704,6 +716,99 @@ document.addEventListener('scroll', function() {
     document.body.classList.add('scrolling-gradient');
 });
 </script>
+<script>
+    async function generarPDFInventario() {
+        const { jsPDF } = window.jspdf;
+
+        const tabla = document.querySelector("#tabla-inventario");
+        const fecha = new Date();
+        const fechaHora = fecha.toLocaleString();
+
+        const logoImg = new Image();
+        logoImg.src = 'src/images/StockWise no bg.png'; // Ajusta la ruta si es diferente
+
+        logoImg.onload = () => {
+            html2canvas(tabla, {
+                backgroundColor: "#ffffff", // fondo blanco
+                scale: 2
+            }).then(canvas => {
+                const pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                const imgDataTabla = canvas.toDataURL("image/png");
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+
+                const logoWidth = 50;
+                const logoHeight = (logoImg.height / logoImg.width) * logoWidth;
+                const centerX = (pdfWidth - logoWidth) / 2;
+
+                pdf.addImage(logoImg, 'PNG', centerX, 10, logoWidth, logoHeight);
+                pdf.setFontSize(12);
+                pdf.text(`Inventario generado el: ${fechaHora}`, 10, logoHeight + 20);
+
+                const imgProps = pdf.getImageProperties(imgDataTabla);
+                const pdfHeight = (imgProps.height * (pdfWidth - 20)) / imgProps.width;
+                pdf.addImage(imgDataTabla, 'PNG', 10, logoHeight + 30, pdfWidth - 20, pdfHeight);
+
+                pdf.save(`Inventario_${fecha.toISOString().slice(0, 10)}.pdf`);
+            });
+        };
+
+        logoImg.onerror = () => {
+            alert("Error al cargar el logo de StockWise. Verifica la ruta.");
+        };
+    }
+</script>
+<script>
+    async function generarPDFProveedores() {
+        const { jsPDF } = window.jspdf;
+
+        const tabla = document.querySelector("#tabla-proveedores");
+        const fecha = new Date();
+        const fechaHora = fecha.toLocaleString();
+
+        const logoImg = new Image();
+        logoImg.src = 'src/images/StockWise no bg.png'; // Verifica esta ruta
+
+        logoImg.onload = () => {
+            html2canvas(tabla, {
+                backgroundColor: "#ffffff", // fondo blanco
+                scale: 2
+            }).then(canvas => {
+                const pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                const imgDataTabla = canvas.toDataURL("image/png");
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+
+                const logoWidth = 50;
+                const logoHeight = (logoImg.height / logoImg.width) * logoWidth;
+                const centerX = (pdfWidth - logoWidth) / 2;
+
+                pdf.addImage(logoImg, 'PNG', centerX, 10, logoWidth, logoHeight);
+                pdf.setFontSize(12);
+                pdf.text(`Listado de Proveedores generado el: ${fechaHora}`, 10, logoHeight + 20);
+
+                const imgProps = pdf.getImageProperties(imgDataTabla);
+                const pdfHeight = (imgProps.height * (pdfWidth - 20)) / imgProps.width;
+                pdf.addImage(imgDataTabla, 'PNG', 10, logoHeight + 30, pdfWidth - 20, pdfHeight);
+
+                pdf.save(`Proveedores_${fecha.toISOString().slice(0, 10)}.pdf`);
+            });
+        };
+
+        logoImg.onerror = () => {
+            alert("Error al cargar el logo de StockWise. Verifica la ruta.");
+        };
+    }
+</script>
+
 <style>
   .tabla-inventario th {
     background: #023ebe !important;
