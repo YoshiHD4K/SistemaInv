@@ -597,6 +597,7 @@ if (isset($_SESSION['id'])) {
                         <th>Descripción</th>
                         <th>Costo</th>
                         <th>Cantidad</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -703,5 +704,11 @@ document.addEventListener('scroll', function() {
     document.body.classList.add('scrolling-gradient');
 });
 </script>
+<style>
+  .tabla-inventario th {
+    background: #023ebe !important;
+    color: #ffffff !important;
+  }
+</style>
 
 </html>

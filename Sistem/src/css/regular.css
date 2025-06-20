@@ -340,8 +340,8 @@ form button:active {
   font-size: 1em;
 }
 .lista-productos-autocompletar li:hover {
-  background: #023ebe;
-  color: #023ebe;
+  background: #023ebe!important;
+  color: #ffffff!important;
 }
 .error-autocompletar {
   color: #b30000;
@@ -369,8 +369,8 @@ form button:active {
   text-align: left;
 }
 .tabla-inventario th {
-  background: #023ebe;
-  color: #023ebe;
+  background: #023ebe !important;
+  color: #ffffff !important;
   font-weight: bold;
 }
 .tabla-inventario tr:last-child td {
@@ -614,5 +614,7 @@ form button:active {
 .dashboard-panel > div > h3 {
     margin-top: 0;
 }
+
+
 
 /* ...resto
