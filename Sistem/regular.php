@@ -643,7 +643,7 @@ if (isset($_SESSION['id'])) {
     </div>
 
     <!-- Logo en la esquina inferior derecha -->
-    <img src="src/images/StockWise no bg.png" alt="StockWise Logo" id="logo-stockwise-bottom">
+    <img src="src/images/white bg no bg.png" alt="StockWise Logo" id="logo-stockwise-bottom">
 
     <!-- Mensaje de copyright -->
     <div id="footer-msg" style="
