@@ -261,36 +261,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_producto'])) 
 
 // Registrar entrada de productos
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) && isset($_POST['cantidad_entrada']) && !isset($_POST['agregar_producto']) && !isset($_POST['agregar_proveedor'])) {
-    $nombre_producto = $_POST['producto_entrada'];
+    $producto = $_POST['producto_entrada'];
     $cantidad = intval($_POST['cantidad_entrada']);
-    $precio_nuevo = isset($_POST['precio_entrada']) ? floatval($_POST['precio_entrada']) : null;
+    $precio = isset($_POST['precio_entrada']) ? floatval($_POST['precio_entrada']) : 0.0;
+    $fecha_ingreso = isset($_POST['fecha_ingreso']) && $_POST['fecha_ingreso'] !== '' ? $_POST['fecha_ingreso'] : date('Y-m-d');
 
-    // Buscar si el producto existe y obtener su precio actual
-    $stmt = $conn->prepare("SELECT Cantidad, Precio FROM productos WHERE Nombre = ?");
-    $stmt->bind_param("s", $nombre_producto);
+    // Buscar si el producto existe y obtener su descripción y cantidad actual
+    $stmt = $conn->prepare("SELECT Descripcion, Cantidad, Precio FROM productos WHERE Nombre = ?");
+    $stmt->bind_param("s", $producto);
     $stmt->execute();
-    $stmt->bind_result($cantidad_actual, $precio_actual);
+    $stmt->bind_result($descripcion, $cantidad_actual, $precio_actual);
     if ($stmt->fetch()) {
         $stmt->close();
-        // Sumar la cantidad
         $nueva_cantidad = $cantidad_actual + $cantidad;
 
-        // Si se ingresó un precio y es diferente al actual, actualizar el precio
-        if ($precio_nuevo !== null && $precio_nuevo != $precio_actual) {
+        // Actualizar cantidad y precio si es necesario
+        if ($precio != $precio_actual) {
             $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ?, Precio = ? WHERE Nombre = ?");
-            $update_stmt->bind_param("ids", $nueva_cantidad, $precio_nuevo, $nombre_producto);
+            $update_stmt->bind_param("ids", $nueva_cantidad, $precio, $producto);
         } else {
             $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ? WHERE Nombre = ?");
-            $update_stmt->bind_param("is", $nueva_cantidad, $nombre_producto);
+            $update_stmt->bind_param("is", $nueva_cantidad, $producto);
         }
 
-        if ($update_stmt->execute()) {
-            echo "<script>alert('Entrada registrada y cantidad actualizada');window.location.href=window.location.href;</script>";
-            exit();
-        } else {
+        if (!$update_stmt->execute()) {
             echo "<script>alert('Error al actualizar la cantidad');</script>";
+            $update_stmt->close();
+            return;
         }
         $update_stmt->close();
+
+        // Registrar en reporte_entradas con fecha de ingreso
+        $stmt_reporte = $conn->prepare("INSERT INTO reporte_entradas (`Nombre`, `Descripcion`, `Precio`, `Cantidad`, `Fecha_ingreso`) VALUES (?, ?, ?, ?, ?)");
+        if (!$stmt_reporte) {
+            echo "<script>alert('Error en prepare reporte_entradas: " . $conn->error . "');</script>";
+            return;
+        }
+        $stmt_reporte->bind_param('ssdis', $producto, $descripcion, $precio, $cantidad, $fecha_ingreso);
+        if (!$stmt_reporte->execute()) {
+            echo "<script>alert('Error al insertar en reporte_entradas: " . $stmt_reporte->error . "');</script>";
+            $stmt_reporte->close();
+            return;
+        }
+        $stmt_reporte->close();
+
+        echo "<script>alert('Entrada registrada y guardada en el historial');window.location.href=window.location.href;</script>";
+        exit();
     } else {
         $stmt->close();
         echo "<script>alert('Producto no encontrado');</script>";
@@ -373,6 +389,7 @@ if (isset($_SESSION['id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="src/css/regular.css">
     <script src="src/js/regular.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Mensaje de bienvenida pequeño y en la esquina superior derecha */
         .bienvenida-mini {
@@ -436,6 +453,7 @@ if (isset($_SESSION['id'])) {
             <li><a href="#" data-screen="pantalla-entrada"><i class="fas fa-sign-in-alt"></i><span>Registrar Entrada</span></a></li>
             <li><a href="#" data-screen="pantalla-salida"><i class="fas fa-sign-out-alt"></i><span>Registrar Salida</span></a></li>
             <li><a href="#" data-screen="pantalla-inventario"><i class="fas fa-warehouse"></i><span>Inventario</span></a></li>
+            <li><a href="#" data-screen="pantalla-reportes"><i class="fas fa-file-alt"></i><span>Reportes</span></a></li>
             <li><a href="#" data-screen="pantalla-configuracion"><i class="fas fa-cog"></i><span>Configuración</span></a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span></a></li>
         </ul>
@@ -581,6 +599,7 @@ if (isset($_SESSION['id'])) {
                 ?>
                 <input type="number" step="0.01" name="precio_entrada" placeholder="Precio" 
                     value="<?php echo htmlspecialchars($precio_mostrar); ?>" required>
+                <input type="date" name="fecha_ingreso" placeholder="Fecha de ingreso" value="<?php echo isset($_POST['fecha_ingreso']) ? htmlspecialchars($_POST['fecha_ingreso']) : date('Y-m-d'); ?>" required>
                 <button type="submit">Registrar Entrada</button>
             </form>
         </div>
@@ -631,6 +650,26 @@ if (isset($_SESSION['id'])) {
                 </tbody>
             </table>
         </div>
+        <div id="pantalla-reportes" class="pantalla">
+    <h2>Generar Reporte de Movimientos</h2>
+    <form method="post" action="Reportes.php" target="_blank">
+        <label>
+            Tipo de reporte:
+            <select name="tipo_reporte" required>
+                <option value="entradas">Entradas de Productos</option>
+                <option value="salidas">Salidas de Productos</option>
+            </select>
+        </label>
+        <label>
+            Fecha:
+            <input type="date" name="fecha_reporte" required>
+        </label>
+        <button type="submit" name="generar_reporte"><i class="fas fa-file-pdf"></i> Generar Reporte</button>
+    </form>
+    <p style="margin-top:18px;color:#888;font-size:0.98em;">
+        Selecciona el tipo de movimiento y la fecha para descargar un reporte detallado en PDF.
+    </p>
+</div>
         <div id="pantalla-configuracion" class="pantalla">
             <h2>Configuración de Usuario - Cambiar Contraseña</h2>
             <form method="post">
