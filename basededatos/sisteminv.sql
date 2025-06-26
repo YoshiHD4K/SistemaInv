@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 26-06-2025 a las 03:24:14
+-- Tiempo de generación: 26-06-2025 a las 05:10:18
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.3.14
 
@@ -91,7 +91,7 @@ INSERT INTO `productos` (`Nombre`, `Descripcion`, `Precio`, `Cantidad`) VALUES
 ('Harina pan', 'harina de maiz, 1 kg', 1.5, 0),
 ('qk', 'gratis', 0, 4),
 ('azucar', 'azucar, 1 kg', 1.5, 14),
-('Neumatico', 'Neumatico, rin 14', 80, 50),
+('Neumatico', 'Neumatico, rin 14', 80, 100),
 ('Bombillo LED', 'Bombillos LED, ahorradores', 2.5, 30);
 
 -- --------------------------------------------------------
@@ -136,7 +136,23 @@ CREATE TABLE IF NOT EXISTS `reporte_entradas` (
 --
 
 INSERT INTO `reporte_entradas` (`Nombre`, `Descripcion`, `Precio`, `Cantidad`, `Fecha_ingreso`) VALUES
-('Bombillo LED', 'Bombillos LED, ahorradores', 2.5, 4, '0000-00-00');
+('Bombillo LED', 'Bombillos LED, ahorradores', 2.5, 4, '0000-00-00'),
+('Neumatico', 'Neumatico, rin 14', 80, 10, '2025-06-26');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reporte_salidas`
+--
+
+DROP TABLE IF EXISTS `reporte_salidas`;
+CREATE TABLE IF NOT EXISTS `reporte_salidas` (
+  `Nombre` varchar(100) NOT NULL,
+  `Descripcion` varchar(200) NOT NULL,
+  `Precio` double NOT NULL,
+  `Cantidad` int NOT NULL,
+  `fecha_salida` date NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
