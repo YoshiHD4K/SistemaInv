@@ -5,12 +5,13 @@ if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'regular') {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['fecha_reporte'])) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['fecha_reporte']) || !isset($_POST['tipo_reporte'])) {
     echo "Acceso inválido.";
     exit();
 }
 
 $fecha = $_POST['fecha_reporte'];
+$tipo_reporte = $_POST['tipo_reporte'];
 
 $servername = "localhost";
 $username = "root";
@@ -21,17 +22,33 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-$titulo = "Reporte de Entradas de Productos";
-
-// Consulta para obtener los datos desde fecha_ingreso
-$sql = "SELECT Nombre AS producto, Descripcion, Precio, Cantidad, Fecha_ingreso 
-        FROM reporte_entradas 
-        WHERE DATE(Fecha_ingreso) = ?";
-
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $fecha);
-$stmt->execute();
-$result = $stmt->get_result();
+if ($tipo_reporte === 'entradas') {
+    $titulo = "Reporte de Entradas de Productos";
+    // Consulta para obtener los datos desde fecha_ingreso
+    $sql = "SELECT Nombre AS producto, Descripcion, Precio, Cantidad, Fecha_ingreso 
+            FROM reporte_entradas 
+            WHERE DATE(Fecha_ingreso) = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $fecha);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $column_fecha = 'Fecha_ingreso';
+    $th_fecha = 'Fecha de Ingreso';
+    $color = '#023ebe';
+} else {
+    $titulo = "Reporte de Salidas de Productos";
+    // Consulta para obtener los datos de reporte_salidas para esa fecha
+    $sql = "SELECT Nombre AS producto, Descripcion, Precio, Cantidad, fecha_salida 
+            FROM reporte_salidas 
+            WHERE DATE(fecha_salida) = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $fecha);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $column_fecha = 'fecha_salida';
+    $th_fecha = 'Fecha de Salida';
+    $color = '#b30000';
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -40,10 +57,10 @@ $result = $stmt->get_result();
     <title><?= htmlspecialchars($titulo) ?></title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f8fbff; margin: 0; padding: 30px;}
-        h2 { color: #023ebe; }
+        h2 { color: <?= $color ?>; }
         table { border-collapse: collapse; width: 100%; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #bfc9d9; overflow: hidden;}
         th, td { padding: 10px 12px; border-bottom: 1px solid #e0e6ef; text-align: left;}
-        th { background: #023ebe; color: #fff;}
+        th { background: <?= $color ?>; color: #fff;}
         tr:last-child td { border-bottom: none; }
         .logo { width: 120px; margin-bottom: 18px;}
         .footer { margin-top: 32px; color: #888; font-size: 0.98em;}
@@ -61,7 +78,7 @@ $result = $stmt->get_result();
                 <th>Descripción</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
-                <th>Fecha de Ingreso</th>
+                <th><?= htmlspecialchars($th_fecha) ?></th>
             </tr>
         </thead>
         <tbody>
@@ -72,14 +89,24 @@ $result = $stmt->get_result();
                 <td><?= htmlspecialchars($row['Descripcion']) ?></td>
                 <td><?= number_format($row['Precio'], 2) ?></td>
                 <td><?= intval($row['Cantidad']) ?></td>
-                <td><?= htmlspecialchars($row['Fecha_ingreso']) ?></td>
+                <td><?= htmlspecialchars($row[$column_fecha]) ?></td>
             </tr>
         <?php endwhile; else: ?>
-            <tr><td colspan="5">No hay registros para esta fecha.</td></tr>
+            <tr>
+                <td colspan="5">
+                    <?php
+                    if ($tipo_reporte === 'entradas') {
+                        echo "No hay registros para esta fecha.";
+                    } else {
+                        echo "No hay registros de salidas para esta fecha.";
+                    }
+                    ?>
+                </td>
+            </tr>
         <?php endif; ?>
         </tbody>
     </table>
-    <button class="no-print" onclick="window.print()" style="margin-top:22px;padding:10px 18px;background:#023ebe;color:#fff;border:none;border-radius:5px;cursor:pointer;">
+    <button class="no-print" onclick="window.print()" style="margin-top:22px;padding:10px 18px;background:<?= $color ?>;color:#fff;border:none;border-radius:5px;cursor:pointer;">
         Imprimir o Guardar como PDF
     </button>
     <div class="footer">

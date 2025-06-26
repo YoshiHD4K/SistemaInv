@@ -317,11 +317,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_entrada']) &
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) && isset($_POST['cantidad_salida'])) {
     $nombre_producto = $_POST['producto_salida'];
     $cantidad = intval($_POST['cantidad_salida']);
-    // Buscar si el producto existe
-    $stmt = $conn->prepare("SELECT Cantidad FROM productos WHERE Nombre = ?");
+    $fecha_salida = isset($_POST['fecha_salida']) && $_POST['fecha_salida'] !== '' ? $_POST['fecha_salida'] : date('Y-m-d');
+
+    // Buscar si el producto existe y obtener descripción y precio
+    $stmt = $conn->prepare("SELECT Descripcion, Cantidad, Precio FROM productos WHERE Nombre = ?");
     $stmt->bind_param("s", $nombre_producto);
     $stmt->execute();
-    $stmt->bind_result($cantidad_actual);
+    $stmt->bind_result($descripcion, $cantidad_actual, $precio_actual);
     if ($stmt->fetch()) {
         $stmt->close();
         if ($cantidad_actual < $cantidad) {
@@ -332,12 +334,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['producto_salida']) &&
             $update_stmt = $conn->prepare("UPDATE productos SET Cantidad = ? WHERE Nombre = ?");
             $update_stmt->bind_param("is", $nueva_cantidad, $nombre_producto);
             if ($update_stmt->execute()) {
-                echo "<script>alert('Salida registrada y cantidad actualizada');window.location.href=window.location.href;</script>";
+                $update_stmt->close();
+
+                // Registrar en reporte_salidas
+                $stmt_reporte = $conn->prepare("INSERT INTO reporte_salidas (`Nombre`, `Descripcion`, `Precio`, `Cantidad`, `fecha_salida`) VALUES (?, ?, ?, ?, ?)");
+                if (!$stmt_reporte) {
+                    echo "<script>alert('Error en prepare reporte_salidas: " . $conn->error . "');</script>";
+                    return;
+                }
+                $stmt_reporte->bind_param('ssdis', $nombre_producto, $descripcion, $precio_actual, $cantidad, $fecha_salida);
+                if (!$stmt_reporte->execute()) {
+                    echo "<script>alert('Error al insertar en reporte_salidas: " . $stmt_reporte->error . "');</script>";
+                    $stmt_reporte->close();
+                    return;
+                }
+                $stmt_reporte->close();
+
+                echo "<script>alert('Salida registrada y guardada en el historial');window.location.href=window.location.href;</script>";
                 exit();
             } else {
                 echo "<script>alert('Error al actualizar la cantidad');</script>";
+                $update_stmt->close();
             }
-            $update_stmt->close();
         }
     } else {
         $stmt->close();
@@ -611,6 +629,7 @@ if (isset($_SESSION['id'])) {
                     <div id="busqueda-productos-salida" class="busqueda-productos"></div>
                 </div>
                 <input type="number" name="cantidad_salida" placeholder="Cantidad" required>
+                <input type="date" name="fecha_salida" placeholder="Fecha de salida" value="<?php echo isset($_POST['fecha_salida']) ? htmlspecialchars($_POST['fecha_salida']) : date('Y-m-d'); ?>" required>
                 <button type="submit">Registrar Salida</button>
             </form>
         </div>
